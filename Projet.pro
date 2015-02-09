@@ -16,10 +16,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    myvideosurface.cpp
+    myvideosurface.cpp \
+    generaltab.cpp \
+    projectinfotab.cpp
 
 HEADERS  += mainwindow.h \
-    myvideosurface.h
+    myvideosurface.h \
+    generaltab.h \
+    projectinfotab.h
 
 FORMS    += mainwindow.ui
 

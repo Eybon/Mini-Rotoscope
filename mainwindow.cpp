@@ -1,3 +1,5 @@
+//avconv -i chrome_japan.mpg -r 1 image-%3d.jpeg
+
 #include <QRect>
 #include <QSize>
 #include <QDesktopWidget>
@@ -12,7 +14,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QTabWidget>
-
+#include "generaltab.h"
+#include "projectinfotab.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -48,32 +51,24 @@ void MainWindow::lancer()
 void MainWindow::newProject()
 {
     QWidget *newProject = new QWidget();
-    newProject->resize(800,500);
-    newProject->show();
-
-    QVBoxLayout *vbox = new QVBoxLayout(newProject);
+    //newProject->resize(800,500);
+   // newProject->show();
 
     QTabWidget *tw = new QTabWidget(newProject);
-    vbox->addWidget(tw);
 
-    QWidget *step1 = new QWidget();
+    //ETAPE 1
     /*QString fileName = QFileDialog::getOpenFileName(this,
         tr("Open Image"), "", tr("Image Files (*.png *.jpg *.bmp)"));*/
 
-    std::string toto = "Etape 1";
-    tw->addTab(step1, QString(toto.c_str()));
+    tw->addTab(new GeneralTab(), tr("Etape 1"));
+    tw->addTab(new ProjectInfoTab(), tr("Etape 2"));
+    //tw->addTab(new GeneralTab(), toto.c_str());
 
-    QWidget *step2 = new QWidget();
-    toto = "Etape 2";
-    tw->addTab(step2, QString(toto.c_str()));
-
-    QWidget *step3 = new QWidget();
-    toto = "Etape 3";
-    tw->addTab(step3, QString(toto.c_str()));
-
-    QWidget *step4 = new QWidget();
-    toto = "Etape 4";
-    tw->addTab(step4, QString(toto.c_str()));
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+     mainLayout->setSizeConstraint(QLayout::SetNoConstraint);
+     mainLayout->addWidget(tw);
+     newProject->setLayout(mainLayout);
+     newProject->show();
 }
 
 MainWindow::~MainWindow()
