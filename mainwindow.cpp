@@ -14,8 +14,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QTabWidget>
-#include "generaltab.h"
-#include "projectinfotab.h"
+#include "thumbnailpicture.h"
+#include "framescontainerwindow.h"
+#include "newproject.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -35,29 +36,14 @@ void MainWindow::lancer()
     zoneDessin = new QZoneDessin(this);
 
     setCentralWidget(zoneDessin);
+
 }
 
 void MainWindow::newProject()
 {
-    QWidget *newProject = new QWidget();
-    //newProject->resize(800,500);
-   // newProject->show();
+    NewProject *newProject = new NewProject(this);
 
-    QTabWidget *tw = new QTabWidget(newProject);
-
-    //ETAPE 1
-    /*QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Open Image"), "", tr("Image Files (*.png *.jpg *.bmp)"));*/
-
-    tw->addTab(new GeneralTab(), tr("Etape 1"));
-    tw->addTab(new ProjectInfoTab(), tr("Etape 2"));
-    //tw->addTab(new GeneralTab(), toto.c_str());
-
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-     mainLayout->setSizeConstraint(QLayout::SetNoConstraint);
-     mainLayout->addWidget(tw);
-     newProject->setLayout(mainLayout);
-     newProject->show();
+    newProject->show();
 }
 
 void MainWindow::createDockWindows()
@@ -145,6 +131,21 @@ void MainWindow::createDockWindows()
 
     dockConf->setWidget(widgetConf);
     addDockWidget(Qt::RightDockWidgetArea, dockConf);
+
+    /* panel de droite -> options du projet */
+    QDockWidget *dockSlide = new QDockWidget(tr(""), this);
+    dockSlide->setAllowedAreas(Qt::BottomDockWidgetArea);
+
+    FramesContainerWindow *m_listeWidget = new FramesContainerWindow();
+
+    m_listeWidget->verticalScrollBar()->close();
+
+    for (int i = 0; i < 10; i++) {
+        m_listeWidget->addItem(new QListWidgetItem(QIcon("C:\\Users\\Maxime\\Desktop\\riot.png"),"Earth"));
+    }
+
+    dockSlide->setWidget(m_listeWidget);
+    addDockWidget(Qt::BottomDockWidgetArea, dockSlide);
 
 }
 
