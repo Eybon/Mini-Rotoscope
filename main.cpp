@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include "myvideosurface.h"
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 #include <QVideoWidget>

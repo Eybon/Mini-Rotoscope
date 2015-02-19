@@ -19,6 +19,7 @@ public:
     void newProject();
     void createMenus();
     void createActions();
+    void createDockWindows();
 
 private:
     Ui::MainWindow *ui;
@@ -40,6 +41,22 @@ private:
     QAction *collerAct;
 
     QZoneDessin *zoneDessin;
+
+    QPushButton *gomme;
+    QPushButton *crayon;
+
+    QPushButton *pelureOignons;
+    QPushButton *lectureVideo;
+    QPushButton *imageFond;
+    QPushButton *exportVideo;
+    QPushButton *aide;
+
+    QPushButton *couleur;
+    QColorDialog *palette;
+
+public slots:
+    void clear(){zoneDessin->clearDessin();}
+    void openPalette(){palette->open();}
 
 };
 

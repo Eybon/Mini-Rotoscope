@@ -13,8 +13,8 @@ public:
 	void paintEvent(QPaintEvent * e);
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
-	void mouseReleaseEvent(QMouseEvent *event);
-	void clearDessin();
+    void mouseReleaseEvent(QMouseEvent *event);
+    void clearDessin();
 private:
 	QImage * m_image;
 	int m_actif;
@@ -22,7 +22,8 @@ private:
 
 
 signals:
-	void draw();
+    void draw();
+
 
 };
 

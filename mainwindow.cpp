@@ -25,68 +25,16 @@ MainWindow::MainWindow(QWidget *parent) :
     lancer();
     createActions();
     createMenus();
+    createDockWindows();
     newProject();
 }
 
 void MainWindow::lancer()
 {
-    QWidget *widget = new QWidget(this);
-
-    QVBoxLayout *vbox = new QVBoxLayout();
-    QHBoxLayout *hbox = new QHBoxLayout();
-
-    /*QMediaPlayer *player = new QMediaPlayer;
-    player->setMedia(QMediaContent(QUrl::fromLocalFile(QFileInfo("Google_Chrome_Japan.mpg").absoluteFilePath())));
-    player->play();
-
-    QVideoWidget *videoWidget = new QVideoWidget;
-    player->setVideoOutput(videoWidget);*/
 
     zoneDessin = new QZoneDessin(this);
-    zoneDessin->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
-    //panelDessin = new QPanelDessin(this);
-    //panelDessin->setMinimumSize(widget->minimumWidth(),widget->minimumHeight());
-
-    /*Panel de dessin */
-
-    QVBoxLayout *panel = new QVBoxLayout();
-
-    QPushButton *crayon = new QPushButton();
-    crayon->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    crayon->setGeometry(0,0,128,56);
-    crayon->setIcon(QIcon("/home/antoine/Téléchargements/Projet/resource/crayon.png"));
-
-    QPushButton *gomme = new QPushButton();
-    gomme->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    gomme->setGeometry(0,0,128,56);
-    gomme->setIcon(QIcon("/home/antoine/Téléchargements/Projet/resource/gomme.png"));
-
-    panel->addWidget(crayon);
-    panel->addWidget(gomme);
-    panel->addStretch();
-
-
-    /*Panel de configuration */
-    QVBoxLayout *panelConf = new QVBoxLayout();
-
-    QPushButton *oignons = new QPushButton();
-    oignons->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    oignons->setGeometry(0,0,128,56);
-    oignons->setIcon(QIcon("/home/antoine/Téléchargements/Projet/resource/oignons.png"));
-
-    panelConf->addWidget(oignons);
-    panelConf->addStretch();
-
-    hbox->addLayout(panel);
-    //hbox->addWidget(panelDessin);
-    hbox->addWidget(zoneDessin);
-    hbox->addLayout(panelConf);
-
-    vbox->addLayout(hbox);
-    widget->setLayout(vbox);
-
-    setCentralWidget(widget);
+    setCentralWidget(zoneDessin);
 }
 
 void MainWindow::newProject()
@@ -112,6 +60,93 @@ void MainWindow::newProject()
      newProject->show();
 }
 
+void MainWindow::createDockWindows()
+{
+        /*Panel de gauche -> options de dessin */
+    QDockWidget *dock = new QDockWidget(tr(""), this);
+    dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+
+        QWidget *widget = new QWidget(dock);
+        QGridLayout *panel = new QGridLayout();
+
+        crayon = new QPushButton();
+        crayon->setIcon(QIcon("./resource/crayon.png"));
+        crayon->setMinimumSize(QSize(60,60));
+
+        gomme = new QPushButton();
+        gomme->setIcon(QIcon("./resource/gomme.png"));
+        gomme->setMinimumSize(QSize(60,60));
+
+        QPushButton *prec = new QPushButton("Prec");
+        //gomme->setIcon(QIcon("./resource/gomme.png"));
+        prec->setMinimumSize(QSize(60,60));
+
+        QPushButton *suiv = new QPushButton("Suiv");
+        //gomme->setIcon(QIcon("./resource/gomme.png"));
+        suiv->setMinimumSize(QSize(60,60));
+
+        palette = new QColorDialog(widget);
+
+        couleur = new QPushButton();
+        couleur->setIcon(QIcon("./resource/palette.png"));
+        couleur->setMinimumSize(QSize(60,120));
+
+        panel->addWidget(prec,0,0);
+        panel->addWidget(suiv,0,1);
+        panel->addWidget(crayon,1,0);
+        panel->addWidget(gomme,2,0);
+        panel->addWidget(couleur,3,0,1,2);
+        panel->setRowStretch(4,15);
+        widget->setLayout(panel);
+
+    dock->setWidget(widget);
+    addDockWidget(Qt::LeftDockWidgetArea, dock);
+
+    connect(crayon, SIGNAL(clicked()), this, SLOT());
+    connect(gomme, SIGNAL(clicked()), this, SLOT(clear()));
+    connect(couleur, SIGNAL(clicked()), this, SLOT(openPalette()));
+
+        /* panel de droite -> options du projet */
+    QDockWidget *dockConf = new QDockWidget(tr(""), this);
+    dockConf->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+
+        QWidget *widgetConf = new QWidget(dock);
+        QVBoxLayout *panelConf = new QVBoxLayout();
+
+        pelureOignons = new QPushButton();
+        pelureOignons->setMinimumSize(QSize(60,60));
+        pelureOignons->setIcon(QIcon("./resource/oignons.png"));
+
+        lectureVideo = new QPushButton("Lec");
+        lectureVideo->setMinimumSize(QSize(60,60));
+        //lectureVideo->setIcon(QIcon(""));
+
+        imageFond = new QPushButton("Fond");
+        imageFond->setMinimumSize(QSize(60,60));
+        //imageFond->setIcon(QIcon("./resource/oignons.png"));
+
+        exportVideo = new QPushButton("Exp");
+        exportVideo->setMinimumSize(QSize(60,60));
+        //exportVideo->setIcon(QIcon("./resource/oignons.png"));
+
+        aide = new QPushButton("?");
+        aide->setMinimumSize(QSize(60,60));
+        //aide->setIcon(QIcon("./resource/oignons.png"));
+
+        panelConf->addStretch();
+        panelConf->addWidget(pelureOignons);
+        panelConf->addWidget(lectureVideo);
+        panelConf->addWidget(imageFond);
+        panelConf->addWidget(exportVideo);
+        panelConf->addStretch();
+        panelConf->addWidget(aide);
+        panelConf->addStretch();
+        widgetConf->setLayout(panelConf);
+
+    dockConf->setWidget(widgetConf);
+    addDockWidget(Qt::RightDockWidgetArea, dockConf);
+
+}
 
 void MainWindow::createMenus()
 {
@@ -212,6 +247,7 @@ void MainWindow::createActions()
     collerAct->setShortcut( QKeySequence( tr("Ctrl+V") ) );
     connect(collerAct, SIGNAL(triggered()), this, SLOT(newFile()));
 }
+
 
 MainWindow::~MainWindow()
 {
