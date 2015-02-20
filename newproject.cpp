@@ -47,7 +47,8 @@ NewProject::NewProject(MainWindow *parent) : QWidget(), parent(parent)
     //tw->addTab(new GeneralTab(), toto.c_str());
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->setSizeConstraint(QLayout::SetNoConstraint);
+    //mainLayout->setSizeConstraint(QLayout::SetNoConstraint);
+
     mainLayout->addWidget(tabWidget);
     this->setLayout(mainLayout);
 }
