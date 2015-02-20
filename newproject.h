@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTabWidget>
 #include <QTimer>
+#include <QThread>
 
 #include "project.h"
 #include "generaltab.h"
@@ -19,14 +20,15 @@ class NewProject : public QWidget
 public:
     NewProject(MainWindow *parent);
     ~NewProject();
+    void delay(int);
 
 private slots:
     void allow_tab_two(QString);
     void allow_ending();
     void render_project_from_settings();
-    void video_rendering_step();
-    void project_file_step();
     void cancel();
+    void end_processing();
+    void next_step();
 
 private:
     MainWindow  *parent;
@@ -38,7 +40,12 @@ private:
 
     QProgressDialog *dialog;
     QTimer *timer;
+    QThread *videoProcessingThread;
+
+    int steps;
+
 signals:
+    void start_video_processing();
     void video_rendered();
     void project_file_created();
 

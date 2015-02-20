@@ -7,13 +7,14 @@
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QProgressDialog>
-#include <QTimer>
+#include <QTime>
 #include <QThread>
 
 #include "generaltab.h"
 #include "projectinfotab.h"
 #include "renderingtab.h"
 #include "mainwindow.h"
+#include "videoprocess.h"
 
 NewProject::NewProject(MainWindow *parent) : QWidget(), parent(parent)
 {
@@ -71,47 +72,65 @@ void NewProject::allow_ending() {
 
 void NewProject::render_project_from_settings() {
 
-    connect(this->project, SIGNAL(video_process_finished()), this, SLOT(video_rendering_step()));
+    this->steps = 0;
     connect(this, SIGNAL(project_file_created()), this, SLOT(project_file_step()));
 
-    this->dialog = new QProgressDialog("Création du projet.", "Annuler", 0, 2);
+    this->dialog = new QProgressDialog("Création du projet.", "Annuler", 0, 2, this);
     this->dialog->setWindowModality(Qt::WindowModal);
+    this->dialog->show();
 
     connect(dialog, SIGNAL(canceled()), this, SLOT(cancel()));
 
-    std::cout << "--- Creating a project : Start ---" << std::endl;
+    qDebug() << "--- Creating a project : Start ---";
 
-    //1. Call avconv and convert the video to a bunch of pictures
-    //We suppose that there is no need to create folder for the project file and the pictures
+    this->videoProcessingThread = new QThread();
+    VideoProcess *videoProcess = new VideoProcess(this->project);
 
-    this->project->processVideo();
+    videoProcess->moveToThread(videoProcessingThread);
+    connect(this, SIGNAL(start_video_processing()), videoProcess, SLOT(start_video_processing()));
+    connect(videoProcess, SIGNAL(step_passed()), this, SLOT(next_step()));
+    //connect(videoProcess, SIGNAL(finished()), this, SLOT(video_rendering_step()));
+    connect(videoProcess, SIGNAL(finished()), this, SLOT(end_processing()));
+    connect(videoProcess, SIGNAL(finished()), videoProcessingThread, SLOT(quit()));
+    connect(videoProcess, SIGNAL(finished()), videoProcess, SLOT(deleteLater()));
+    connect(videoProcess, SIGNAL(finished()), videoProcessingThread, SLOT(deleteLater()));
 
-    //2. Create a project file made of XML containing the project data
+    videoProcessingThread->start();
 
-    QFile file( QDir(this->project->getProjectFolder()).filePath("projet.rtscp") );
-    this->project->toFile( &file );
-    emit project_file_created();
+    emit start_video_processing();
 
-    //3. Then open the freshly created project on the current panel
-    //Ask the user to close (and save ?) the current project if one opened.
-
-    std::cout << "--- Project created ---" << std::endl;
 }
 
-void NewProject::video_rendering_step() {
-    this->dialog->setValue(1);
-    std::cout << "Images extracted" << std::endl;
-}
-
-void NewProject::project_file_step() {
-    this->dialog->setValue(2);
-    std::cout << "Project file created" << std::endl;
+void NewProject::next_step() {
+    this->dialog->setValue(++steps);
 }
 
 void NewProject::cancel() {
     QFile file( QDir(this->project->getProjectFolder()).filePath("projet.rtscp") );
     if (file.exists()) {
         file.remove();
+    }
+}
+
+void NewProject::end_processing() {
+
+    qDebug() << "Dialog closed and working thread ended";
+
+    dialog->close();
+    videoProcessingThread->quit();
+
+    //3. Then open the freshly created project on the current panel
+    //Ask the user to close (and save ?) the current project if one opened.
+
+    qDebug() << "--- Project created ---";
+}
+
+void NewProject::delay( int millisecondsToWait )
+{
+    QTime dieTime = QTime::currentTime().addMSecs( millisecondsToWait );
+    while( QTime::currentTime() < dieTime )
+    {
+        QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
     }
 }
 
