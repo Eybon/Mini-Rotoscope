@@ -15,8 +15,13 @@ public:
 	void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void clearDessin();
+    void ajouterFond();
+    void activerFond();
 private:
-	QImage * m_image;
+    QImage *m_imageFond;
+    bool m_fondActive;
+    QImage *m_image;
+    QImage *m_dessin;
 	int m_actif;
 	QPoint *m_position;
 

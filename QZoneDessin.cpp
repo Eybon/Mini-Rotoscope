@@ -5,19 +5,34 @@ QZoneDessin::QZoneDessin(QWidget * parent)
 {
 	QWidget(parent,0);
 	m_image = NULL;
+    m_dessin = NULL;
 	m_actif = 0;
-	m_position = NULL;
-	
+	m_position = NULL;	
+    m_fondActive = false;
 }
 
+void QZoneDessin::ajouterFond()
+{
+
+}
+
+void QZoneDessin::activerFond()
+{
+
+}
 
 void QZoneDessin::resizeEvent(QResizeEvent * e)
 {
-	if (m_image == NULL)
+    if (m_dessin == NULL)
 	{
-		m_image = new QImage(e->size(),QImage::Format_Mono);
-		QPainter p(m_image);
-        p.fillRect(0,0,1500,1200,Qt::white);
+        m_image = new QImage("./resource/crayon.png");
+        *m_image = m_image->convertToFormat(QImage::Format_ARGB32);
+        m_dessin = new QImage(e->size(),QImage::Format_ARGB32);
+        //QPainter p(m_image);
+        QPainter p1(m_dessin);
+        //p.fillRect(0,0,m_image->width(),m_image->height(),Qt::white);
+        p1.fillRect(0,0,m_dessin->width(),m_dessin->height(),Qt::white);
+
 	}
 	else
 	{	
@@ -25,16 +40,16 @@ void QZoneDessin::resizeEvent(QResizeEvent * e)
 		//copie de l'image 
 		QPainter p(image);
         p.fillRect(0,0,1500,1200,Qt::white);
-		p.drawImage(0,0,*m_image);
-		delete m_image;
-		m_image = new QImage(*image);
+        p.drawImage(0,0,*m_dessin);
+        delete m_dessin;
+        m_dessin = new QImage(*image);
 	}	
 }
 
 void QZoneDessin::paintEvent(QPaintEvent * e)
 {	
 	QPainter  p(this);
-	p.drawImage(0,0,*m_image);
+    p.drawImage(0,0,*m_dessin);
 }
 
 void QZoneDessin::mousePressEvent(QMouseEvent *event)
@@ -50,7 +65,7 @@ void QZoneDessin::mouseMoveEvent(QMouseEvent *event)
 	{
 		emit draw();
 		//std::cout << "actif" << std::endl;
-		QPainter paint(m_image); 
+        QPainter paint(m_dessin);
 		QPoint * position = new QPoint(event->pos());
 		QLine * l = new QLine(*m_position,*position);
 		paint.drawLine(*l);
@@ -71,11 +86,11 @@ void QZoneDessin::mouseReleaseEvent(QMouseEvent *event)
 
 void QZoneDessin::clearDessin()
 {
-	QSize s(m_image->size());
-	delete m_image;
-	m_image = new QImage(s,QImage::Format_Mono);
-	QPainter p(m_image);
-    p.fillRect(0,0,m_image->height(),m_image->height(),Qt::white);
+    QSize s(m_dessin->size());
+    delete m_dessin;
+    m_dessin = new QImage(s,QImage::Format_Mono);
+    QPainter p(m_dessin);
+    p.fillRect(0,0,m_dessin->width(),m_dessin->height(),Qt::white);
 	this->update();
 }
 

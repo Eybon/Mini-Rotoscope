@@ -27,14 +27,14 @@ MainWindow::MainWindow(QWidget *parent) :
     createActions();
     createMenus();
     createDockWindows();
-    newProject();
+    //newProject();
 }
 
 void MainWindow::lancer()
 {
 
     zoneDessin = new QZoneDessin(this);
-
+    zoneDessin->ajouterFond();
     setCentralWidget(zoneDessin);
 
 }
@@ -141,7 +141,7 @@ void MainWindow::createDockWindows()
     m_listeWidget->verticalScrollBar()->close();
 
     for (int i = 0; i < 10; i++) {
-        m_listeWidget->addItem(new QListWidgetItem(QIcon("C:\\Users\\Maxime\\Desktop\\riot.png"),"Earth"));
+        m_listeWidget->addItem(new QListWidgetItem(QIcon("./resource/crayon.png"),"Earth"));
     }
 
     dockSlide->setWidget(m_listeWidget);
