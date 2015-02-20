@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QFileDialog>
+#include <QWidget>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     createMenus();
     createDockWindows();
     //newProject();
+
 }
 
 void MainWindow::lancer()
@@ -37,13 +39,6 @@ void MainWindow::lancer()
     zoneDessin->ajouterFond();
     setCentralWidget(zoneDessin);
 
-}
-
-void MainWindow::newProject()
-{
-    NewProject *newProject = new NewProject(this);
-
-    newProject->show();
 }
 
 void MainWindow::createDockWindows()
@@ -141,7 +136,7 @@ void MainWindow::createDockWindows()
     m_listeWidget->verticalScrollBar()->close();
 
     for (int i = 0; i < 10; i++) {
-        m_listeWidget->addItem(new QListWidgetItem(QIcon("./resource/crayon.png"),"Earth"));
+        m_listeWidget->addItem(new QListWidgetItem(QIcon("./resource/thumb/riot.png"),"Riot"));
     }
 
     dockSlide->setWidget(m_listeWidget);
@@ -249,6 +244,14 @@ void MainWindow::createActions()
     connect(collerAct, SIGNAL(triggered()), this, SLOT(newFile()));
 }
 
+void MainWindow::newFile() {
+    NewProject *newProject = new NewProject(this);
+    newProject->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    newProject->setMinimumWidth(600);
+    newProject->setWindowTitle(tr("Nouveau projet"));
+    newProject->setWindowModality(Qt::WindowModal);
+    newProject->show();
+}
 
 MainWindow::~MainWindow()
 {

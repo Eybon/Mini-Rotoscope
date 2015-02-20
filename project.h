@@ -15,6 +15,7 @@ public:
 
     static const int DEFAULT_FRAMERATE = 8;
 
+    void setName(QString name);
     void setMovieFile(QString movieFile);
     void setProjectFolder(QString projectFolder);
     void setImagesFolder(QString imagesFolder);
@@ -22,6 +23,7 @@ public:
     void setFramerate(int framerate);
     void setDefinition(int definition);
 
+    QString getName();
     QString getMovieFile();
     QString getProjectFolder();
     QString getImagesFolder();
@@ -34,6 +36,7 @@ public:
     void processVideo();
 
 private:
+    QString name;
     QString movieFile;
     QString projectFolder;
     QString imagesFolder;
@@ -43,9 +46,6 @@ private:
     int definition;
 
     QProcess *process;
-
-private slots:
-    void end_video_process();
 
 signals:
     void video_process_finished();

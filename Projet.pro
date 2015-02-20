@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     framescontainerwindow.cpp \
     newproject.cpp \
     renderingtab.cpp \
-    project.cpp
+    project.cpp \
+    videoprocess.cpp
 
 HEADERS  += mainwindow.h \
     generaltab.h \
@@ -34,7 +35,8 @@ HEADERS  += mainwindow.h \
     framescontainerwindow.h \
     newproject.h \
     renderingtab.h \
-    project.h
+    project.h \
+    videoprocess.h
 
 FORMS    += mainwindow.ui
 

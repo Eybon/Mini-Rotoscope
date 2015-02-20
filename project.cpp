@@ -12,6 +12,7 @@
 #include <QFile>
 #include <QProcess>
 #include <QObject>
+#include <QFileInfo>
 
 Project::Project() : QObject(0)
 {
@@ -24,6 +25,10 @@ Project::~Project()
 }
 
 /** Setters */
+
+void Project::setName(QString name) {
+    this->name = name;
+}
 
 void Project::setMovieFile(QString movieFile) {
     this->movieFile = movieFile;
@@ -50,6 +55,10 @@ void Project::setDefinition(int definition) {
 }
 
 /** Getters */
+
+QString Project::getName() {
+    return this->name;
+}
 
 QString Project::getMovieFile() {
     return this->movieFile;
@@ -93,40 +102,37 @@ QString Project::toFile( QFile *file ) {
     // On ajoute l'élément <settings> en tant que premier enfant de l'élément <root>
     root.appendChild(site);
 
-    // Création de l'élément <video>
-    QDomElement nom = doc.createElement("video");
-    site.appendChild(nom);
+    // <name>
+    QDomElement name = doc.createElement("name");
+    site.appendChild(name);
+    QDomText nameText = doc.createTextNode(this->name);
+    name.appendChild(nameText);
 
-    // Création du texte qui sera entre les balises <video> </video>
-    /** TODO */
-    QDomText nomText = doc.createTextNode(this->movieFile);
-    nom.appendChild(nomText);
+    // <video>
+    QDomElement video = doc.createElement("video");
+    site.appendChild(video);
+    QDomText videoText = doc.createTextNode(this->movieFile);
+    video.appendChild(videoText);
 
-    // Création de l'élément <folder>
-    QDomElement url = doc.createElement("folder");
-    site.appendChild(url);
+    // <folder>
+    QDomElement folder = doc.createElement("folder");
+    site.appendChild(folder);
+    QDomText folderText = doc.createTextNode(this->projectFolder);
+    folder.appendChild(folderText);
 
-    /** TODO */
-    QDomText urlText = doc.createTextNode(this->projectFolder);
-    url.appendChild(urlText);
-
-    // Création de l'élément <images>
+    // <images>
     QDomElement images = doc.createElement("images");
     site.appendChild(images);
-
-    /** TODO */
     QDomText urlImages = doc.createTextNode(this->imagesFolder);
     images.appendChild(urlImages);
 
-    // Création de l'élément <framerate>
+    // <framerate>
     QDomElement framerate = doc.createElement("framerate");
     site.appendChild(framerate);
-
-    /** TODO */
     QDomText valueFramerate = doc.createTextNode(QString::number(this->framerate));
     framerate.appendChild(valueFramerate);
 
-    // Création de l'élément <definition>
+    //<definition>
     QDomElement definition = doc.createElement("definition");
     site.appendChild(definition);
 
@@ -145,26 +151,23 @@ QString Project::toFile( QFile *file ) {
     return output;
 }
 
+/*
 void Project::processVideo() {
-    QFile file( QDir(this->imagesFolder).filePath("frame%d.jpg") );
-    QString command = "-i "+ this->movieFile +" -r "+ QString::number(this->framerate) +" -y "+ file.fileName();
 
-    std::cout << "Programme : " << this->videoProcessingFolder.toUtf8().constData() << std::endl;
-    std::cout << "Commande : " << command.toUtf8().constData() << std::endl;
+    QFileInfo selectedFile = QFileInfo(this->movieFile);
 
-    //this->process->setWorkingDirectory(QDir(this->videoProcessingFolder).path());
-    this->process->start(this->videoProcessingFolder, QStringList() << command);
+    this->name = selectedFile.baseName();
 
-    if ( !this->process->waitForFinished() ) {
-        std::cout << this->process->errorString().toUtf8().constData() << std::endl;
-        std::cout << "error while processing" << std::endl;
-    }
-    QObject::connect(this->process,SIGNAL(finished(int)),this,SLOT(end_video_process()));
-    //emit(this->video_process_finished());
+    QStringList args;
+    args << "-i" << this->movieFile;
+    args << "-r" << QString::number(this->framerate);
+    args << selectedFile.baseName() + "-%3d.jpeg";
+
+    QProcess command;
+    command.setWorkingDirectory(this->imagesFolder);
+    command.start(this->videoProcessingFolder, args);
+    command.waitForFinished();
+
+   emit video_process_finished();
 }
-
-void Project::end_video_process()
-{
-    std::cout << "Process terminé" << std::endl;
-    emit(this->video_process_finished());
-}
+*/

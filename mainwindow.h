@@ -16,7 +16,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void lancer();
-    void newProject();
     void createMenus();
     void createActions();
     void createDockWindows();
@@ -55,6 +54,7 @@ private:
     QColorDialog *palette;
 
 public slots:
+    void newFile();
     void clear(){zoneDessin->clearDessin();}
     void openPalette(){palette->open();}
 
