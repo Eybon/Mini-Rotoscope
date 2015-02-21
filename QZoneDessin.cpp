@@ -17,14 +17,14 @@ void QZoneDessin::resizeEvent(QResizeEvent * e)
 	{
 		m_image = new QImage(e->size(),QImage::Format_Mono);
 		QPainter p(m_image);
-        p.fillRect(0,0,1500,1200,Qt::white);
+        p.fillRect(0,0,1500,1200,Qt::transparent);
 	}
 	else
 	{	
 		QImage * image = new QImage(e->size(),QImage::Format_Mono);
 		//copie de l'image 
 		QPainter p(image);
-        p.fillRect(0,0,1500,1200,Qt::white);
+        p.fillRect(0,0,1500,1200,Qt::transparent);
 		p.drawImage(0,0,*m_image);
 		delete m_image;
 		m_image = new QImage(*image);

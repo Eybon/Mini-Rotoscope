@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "QZoneDessin.h"
+#include "framescontainerwindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +23,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    FramesContainerWindow *framesContainer;
 
     /*Menu et Action des Menus File et Edit*/
     QMenu *fileMenu;
@@ -55,6 +57,7 @@ private:
 
 public slots:
     void newFile();
+    void openFile();
     void clear(){zoneDessin->clearDessin();}
     void openPalette(){palette->open();}
 

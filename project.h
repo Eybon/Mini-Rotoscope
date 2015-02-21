@@ -14,6 +14,7 @@ public:
     ~Project();
 
     static const int DEFAULT_FRAMERATE = 8;
+    static Project* fromFile(QString filename);
 
     void setName(QString name);
     void setMovieFile(QString movieFile);

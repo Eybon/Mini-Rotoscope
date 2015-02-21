@@ -26,12 +26,12 @@ void VideoProcess::start_video_processing() {
     QStringList args;
     args << "-i" << this->project->getMovieFile();
     args << "-r" << QString::number(this->project->getFramerate());
-    args << selectedFile.baseName() + "-%3d.jpeg";
+    args << selectedFile.baseName() + "-%3d.png";
 
     QProcess command;
     command.setWorkingDirectory(this->project->getImagesFolder());
     command.start(this->project->getVideoProcessingFolder(), args);
-    command.waitForFinished();
+    command.waitForFinished(-1);
 
     qDebug() << "Video processing finished";
     emit step_passed();
@@ -40,6 +40,8 @@ void VideoProcess::start_video_processing() {
 
     QFile file( QDir(this->project->getProjectFolder()).filePath("projet.rtscp") );
     this->project->toFile( &file );
+    qDebug() << "Project file written at " << file.fileName();
+
     emit step_passed();
 
     emit finished();

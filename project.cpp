@@ -151,6 +151,72 @@ QString Project::toFile( QFile *file ) {
     return output;
 }
 
+Project* Project::fromFile(QString filename) {
+    Project *project = new Project();
+
+    QFile file(filename);
+    file.open(QFile::ReadOnly | QFile::Text);
+
+    QDomDocument doc;
+    //we don't care about the namespace(s)
+    doc.setContent(&file, false);
+
+    //<project>
+    QDomElement root = doc.documentElement();
+
+    //<settings> or other global group
+    root = root.firstChildElement();
+
+    while(!root.isNull())
+    {
+        // <settings>
+        if(root.tagName() == "settings")
+        {
+            QDomElement element = root.firstChildElement();
+
+            // foreach child
+            while(!element.isNull())
+            {
+                // <name>
+                if(element.tagName() == "name")
+                {
+                   project->setName(element.text());
+                }
+                // <video>
+                else if(element.tagName() == "video")
+                {
+                    project->setMovieFile(element.text());
+                }
+                // <folder>
+                else if(element.tagName() == "folder")
+                {
+                    project->setProjectFolder(element.text());
+                }
+                // <images>
+                else if(element.tagName() == "images")
+                {
+                    project->setImagesFolder(element.text());
+                }
+                // <framerate>
+                else if(element.tagName() == "framerate")
+                {
+                    project->setFramerate(element.text().toInt());
+                }
+                // <definition>
+                else if(element.tagName() == "definition")
+                {
+                    project->setDefinition(element.text().toInt());
+                }
+                element = element.nextSiblingElement();
+            }
+        }
+
+        root = root.nextSiblingElement();
+    }
+
+    return project;
+}
+
 /*
 void Project::processVideo() {
 

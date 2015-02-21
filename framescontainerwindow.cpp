@@ -1,5 +1,11 @@
 #include "framescontainerwindow.h"
+#include "project.h"
+
+#include <QtCore>
 #include <string>
+#include <QDir>
+#include <QFileInfoList>
+#include <QProgressDialog>
 
 using namespace std;
 
@@ -26,6 +32,34 @@ void FramesContainerWindow::addItem(QListWidgetItem *item)
     QListWidget::addItem(item);
 }
 
-void FramesContainerWindow::loadFromFolder(string folder) {
+void FramesContainerWindow::loadProject(Project *project) {
+    QStringList filter("*.png");
+    QDir folder(project->getImagesFolder());
+    folder.setFilter(QDir::Files);
+    folder.setSorting(QDir::Name);
 
+    QFileInfoList files = folder.entryInfoList(filter);
+    qDebug() << files.size() << " elements";
+
+    this->clear();
+
+    QProgressDialog progress("Chargement des images...", "Annuler", 0, files.size(), this);
+    progress.setWindowModality(Qt::WindowModal);
+    progress.setValue(0);
+    progress.show();
+
+    for (int i=0; i < files.size(); i++) {
+        QFileInfo fileInfo = files.at(i);
+        //qDebug() << fileInfo.absoluteFilePath();
+        this->addItem(new QListWidgetItem(QIcon(fileInfo.absoluteFilePath()),tr("test")));
+        //this->addItem(new QListWidgetItem(QIcon("./resource/thumb/riot.png"),tr("test")));
+        progress.setValue(i);
+    }
+    /*
+    foreach (const QString &str, files) {
+        //qDebug() << str;
+        QFile file( folder.filePath(str) );
+        this->addItem(new QListWidgetItem(QIcon(file.fileName()),str));
+    }
+    */
 }
