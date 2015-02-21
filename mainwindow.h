@@ -53,10 +53,18 @@ private:
     QPushButton *couleur;
     QColorDialog *palette;
 
+signals:
+
+
 public slots:
     void newFile();
-    void clear(){zoneDessin->clearDessin();}
+    void write(){zoneDessin->setColorPen(Qt::black);}
+    void clear(){zoneDessin->setColorPen(Qt::white);}
     void openPalette(){palette->open();}
+    void smallPen(){zoneDessin->setSizePen(10);}
+    void bigPen(){zoneDessin->setSizePen(30);}
+    void color(QColor c){zoneDessin->setColorPen(c);}
+    void activeFond(){zoneDessin->activeFond();}
 
 };
 

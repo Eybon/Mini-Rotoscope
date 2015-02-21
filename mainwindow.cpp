@@ -36,7 +36,6 @@ void MainWindow::lancer()
 {
 
     zoneDessin = new QZoneDessin(this);
-    zoneDessin->ajouterFond();
     setCentralWidget(zoneDessin);
 
 }
@@ -58,13 +57,21 @@ void MainWindow::createDockWindows()
         gomme->setIcon(QIcon("./resource/gomme.png"));
         gomme->setMinimumSize(QSize(60,60));
 
-        QPushButton *prec = new QPushButton("Prec");
-        //gomme->setIcon(QIcon("./resource/gomme.png"));
+        QPushButton *prec = new QPushButton();
+        prec->setIcon(QIcon("./resource/gauche.png"));
         prec->setMinimumSize(QSize(60,60));
 
-        QPushButton *suiv = new QPushButton("Suiv");
-        //gomme->setIcon(QIcon("./resource/gomme.png"));
+        QPushButton *suiv = new QPushButton();
+        suiv->setIcon(QIcon("./resource/droite.png"));
         suiv->setMinimumSize(QSize(60,60));
+
+        QPushButton *small = new QPushButton("Petit");
+        //gomme->setIcon(QIcon("./resource/gomme.png"));
+        small->setMinimumSize(QSize(60,60));
+
+        QPushButton *big = new QPushButton("Gros");
+        //gomme->setIcon(QIcon("./resource/gomme.png"));
+        big->setMinimumSize(QSize(60,60));
 
         palette = new QColorDialog(widget);
 
@@ -77,15 +84,20 @@ void MainWindow::createDockWindows()
         panel->addWidget(crayon,1,0);
         panel->addWidget(gomme,2,0);
         panel->addWidget(couleur,3,0,1,2);
+        panel->addWidget(small,1,1);
+        panel->addWidget(big,2,1);
         panel->setRowStretch(4,15);
         widget->setLayout(panel);
 
     dock->setWidget(widget);
     addDockWidget(Qt::LeftDockWidgetArea, dock);
 
-    connect(crayon, SIGNAL(clicked()), this, SLOT());
+    connect(crayon, SIGNAL(clicked()), this, SLOT(write()));
     connect(gomme, SIGNAL(clicked()), this, SLOT(clear()));
     connect(couleur, SIGNAL(clicked()), this, SLOT(openPalette()));
+    connect(small, SIGNAL(clicked()), this, SLOT(smallPen()));
+    connect(big, SIGNAL(clicked()), this, SLOT(bigPen()));
+    connect(palette, SIGNAL(colorSelected(QColor)), this, SLOT(color(QColor)));
 
         /* panel de droite -> options du projet */
     QDockWidget *dockConf = new QDockWidget(tr(""), this);
@@ -102,9 +114,9 @@ void MainWindow::createDockWindows()
         lectureVideo->setMinimumSize(QSize(60,60));
         //lectureVideo->setIcon(QIcon(""));
 
-        imageFond = new QPushButton("Fond");
+        imageFond = new QPushButton();
         imageFond->setMinimumSize(QSize(60,60));
-        //imageFond->setIcon(QIcon("./resource/oignons.png"));
+        imageFond->setIcon(QIcon("./resource/paysage.PNG"));
 
         exportVideo = new QPushButton("Exp");
         exportVideo->setMinimumSize(QSize(60,60));
@@ -127,7 +139,9 @@ void MainWindow::createDockWindows()
     dockConf->setWidget(widgetConf);
     addDockWidget(Qt::RightDockWidgetArea, dockConf);
 
-    /* panel de droite -> options du projet */
+    connect(imageFond, SIGNAL(clicked()), this, SLOT(activeFond()));
+
+    /* panel du bas  */
     QDockWidget *dockSlide = new QDockWidget(tr(""), this);
     dockSlide->setAllowedAreas(Qt::BottomDockWidgetArea);
 

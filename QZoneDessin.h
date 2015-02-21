@@ -15,20 +15,23 @@ public:
 	void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void clearDessin();
-    void ajouterFond();
-    void activerFond();
+    void setSizePen(int size);
+    void setColorPen(QColor color);
+    void setImageFond(QString s);
+    void activeFond();
+
 private:
-    QImage *m_imageFond;
     bool m_fondActive;
     QImage *m_image;
     QImage *m_dessin;
 	int m_actif;
 	QPoint *m_position;
-
+    QPen pen;
 
 signals:
     void draw();
 
+public slots:
 
 };
 
