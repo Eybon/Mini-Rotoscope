@@ -18,6 +18,9 @@ public:
     void addItem(QListWidgetItem*);
     void loadProject(Project*);
 
+signals:
+    void change_frame(QListWidgetItem*);
+
 private:
     QScrollArea* scrollArea;
 
