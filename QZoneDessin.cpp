@@ -101,6 +101,7 @@ void QZoneDessin::setColorPen(QColor color)
 void QZoneDessin::setImageFond(QString img)
 {
     m_image = new QImage(img);
+    this->update();
 }
 
 void QZoneDessin::activeFond()
