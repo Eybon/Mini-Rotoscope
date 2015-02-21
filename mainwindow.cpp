@@ -149,6 +149,7 @@ void MainWindow::createDockWindows()
 
     this->framesContainer = new FramesContainerWindow();
     framesContainer->verticalScrollBar()->close();
+    connect(framesContainer, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(change_frame(QListWidgetItem*)));
 
     for (int i = 0; i < 10; i++) {
         framesContainer->addItem(new QListWidgetItem(QIcon("./resource/thumb/riot.png"),"Riot"));
@@ -277,6 +278,11 @@ void MainWindow::openFile() {
     qDebug() << "Project opened : " << project->getName();
 
     framesContainer->loadProject(project);
+}
+
+void MainWindow::change_frame(QListWidgetItem *item) {
+    qDebug() << "[focus] " << item->data(Qt::DisplayRole).toString();
+    this->zoneDessin->setImageFond(item->data(Qt::DisplayRole).toString());
 }
 
 MainWindow::~MainWindow()
