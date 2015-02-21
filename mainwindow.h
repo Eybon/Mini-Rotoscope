@@ -69,6 +69,7 @@ public slots:
     void color(QColor c){zoneDessin->setColorPen(c);}
     void activeFond(){zoneDessin->activeFond();}
 
+    void change_frame(QListWidgetItem*);
 };
 
 #endif // MAINWINDOW_H
