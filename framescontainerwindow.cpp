@@ -6,6 +6,9 @@
 #include <QDir>
 #include <QFileInfoList>
 #include <QProgressDialog>
+#include <QVariant>
+
+#include "mainwindow.h"
 
 using namespace std;
 
@@ -50,9 +53,11 @@ void FramesContainerWindow::loadProject(Project *project) {
 
     for (int i=0; i < files.size(); i++) {
         QFileInfo fileInfo = files.at(i);
-        //qDebug() << fileInfo.absoluteFilePath();
-        this->addItem(new QListWidgetItem(QIcon(fileInfo.absoluteFilePath()),tr("test")));
-        //this->addItem(new QListWidgetItem(QIcon("./resource/thumb/riot.png"),tr("test")));
+
+        QListWidgetItem *item = new QListWidgetItem(QIcon(fileInfo.absoluteFilePath()),tr("test"));
+        this->addItem(item);
+        item->setData(Qt::DisplayRole, QVariant(fileInfo.absoluteFilePath()));
+
         progress.setValue(i);
     }
     /*
