@@ -117,8 +117,8 @@ void NewProject::end_processing() {
 
     qDebug() << "Dialog closed and working thread ended";
 
-    dialog->close();
-    videoProcessingThread->quit();
+    dialog->deleteLater();
+    videoProcessingThread->deleteLater();
 
     //3. Then open the freshly created project on the current panel
     //Ask the user to close (and save ?) the current project if one opened.

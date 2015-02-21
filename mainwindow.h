@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "QZoneDessin.h"
+#include "framescontainerwindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +23,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    FramesContainerWindow *framesContainer;
 
     /*Menu et Action des Menus File et Edit*/
     QMenu *fileMenu;
@@ -60,6 +62,7 @@ public slots:
     void newFile();
     void write(){zoneDessin->setColorPen(Qt::black);}
     void clear(){zoneDessin->setColorPen(Qt::white);}
+    void openFile();
     void openPalette(){palette->open();}
     void smallPen(){zoneDessin->setSizePen(10);}
     void bigPen(){zoneDessin->setSizePen(30);}

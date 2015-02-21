@@ -5,14 +5,19 @@
 #include <QListWidgetItem>
 #include <QScrollArea>
 
+#include "project.h"
+
 class FramesContainerWindow : public QListWidget
 {
+    Q_OBJECT
+
 public:
     FramesContainerWindow();
     ~FramesContainerWindow();
     QScrollArea* getScrollArea();
     void addItem(QListWidgetItem*);
-    void loadFromFolder(std::string);
+    void loadProject(Project*);
+
 private:
     QScrollArea* scrollArea;
 

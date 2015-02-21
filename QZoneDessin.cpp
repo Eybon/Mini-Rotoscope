@@ -25,6 +25,7 @@ void QZoneDessin::resizeEvent(QResizeEvent * e)
     m_dessin = new QImage(m_dessin->scaled(e->size()));
     m_image = new QImage(m_image->scaled(e->size()));
     this->update();
+
 }
 
 void QZoneDessin::paintEvent(QPaintEvent * e)

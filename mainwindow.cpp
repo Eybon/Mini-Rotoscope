@@ -11,6 +11,7 @@
 #include <QHBoxLayout>
 #include <QFileDialog>
 #include <QWidget>
+#include <QFileInfo>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -18,6 +19,7 @@
 #include "thumbnailpicture.h"
 #include "framescontainerwindow.h"
 #include "newproject.h"
+#include "project.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -145,15 +147,14 @@ void MainWindow::createDockWindows()
     QDockWidget *dockSlide = new QDockWidget(tr(""), this);
     dockSlide->setAllowedAreas(Qt::BottomDockWidgetArea);
 
-    FramesContainerWindow *m_listeWidget = new FramesContainerWindow();
-
-    m_listeWidget->verticalScrollBar()->close();
+    this->framesContainer = new FramesContainerWindow();
+    framesContainer->verticalScrollBar()->close();
 
     for (int i = 0; i < 10; i++) {
-        m_listeWidget->addItem(new QListWidgetItem(QIcon("./resource/thumb/riot.png"),"Riot"));
+        framesContainer->addItem(new QListWidgetItem(QIcon("./resource/thumb/riot.png"),"Riot"));
     }
 
-    dockSlide->setWidget(m_listeWidget);
+    dockSlide->setWidget(framesContainer);
     addDockWidget(Qt::BottomDockWidgetArea, dockSlide);
 
 }
@@ -265,6 +266,17 @@ void MainWindow::newFile() {
     newProject->setWindowTitle(tr("Nouveau projet"));
     newProject->setWindowModality(Qt::WindowModal);
     newProject->show();
+}
+
+void MainWindow::openFile() {
+    QString filename = QFileDialog::getOpenFileName(this, tr("Sélectionnez le fichier de projet"), "", tr("Rotoskopia (*.rtscp)"));
+    //QFileInfo infos = QFileInfo(filename);
+
+    //Let's admit first that the file is correct, so does the project
+    Project *project = Project::fromFile(filename);
+    qDebug() << "Project opened : " << project->getName();
+
+    framesContainer->loadProject(project);
 }
 
 MainWindow::~MainWindow()
