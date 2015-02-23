@@ -16,13 +16,15 @@ QZoneDessin::QZoneDessin(QWidget * parent)
     m_fondActive = true;
     drawings = std::map<QString, QImage*>();
 
+    project = NULL;
+
     indice = 0;
     images_amount = 0;
 
     m_onionsActive = false;
     m_onionsLayerNumber = 3;
 
-    setImageFond("./resource/gomme.png");
+    m_image = new QImage("./resource/gomme.png");
     setColorPen(Qt::black);
     setSizePen(10);
 }
@@ -124,14 +126,7 @@ void QZoneDessin::setImageFond(QString img)
 
 void QZoneDessin::activeFond()
 {
-    if(m_fondActive == true)
-    {
-        m_fondActive = false;
-    }
-    else
-    {
-        m_fondActive = true;
-    }
+    m_fondActive= !m_fondActive;
     this->update();
 }
 
@@ -194,6 +189,7 @@ void QZoneDessin::loadProject(Project *project) {
         images_amount++;
     }
 
+    this->project = project;
 }
 
 int QZoneDessin::getCurrentImageIndex(QString img) {
@@ -221,17 +217,29 @@ QString QZoneDessin::getImageForIndex(int index) {
 }
 
 void QZoneDessin::previous_image() {
-    qDebug() << "Indice " << indice;
-    QString img = getImageForIndex(indice-1);
-    qDebug() << "Image à récupérer : " <<  img;
-    setImageFond(img);
+    if (project != NULL) {
+        qDebug() << "Indice " << indice;
+        QString img = getImageForIndex( (indice > 0) ? indice-1 : indice);
+        qDebug() << "Image à récupérer : " <<  img;
+        setImageFond(img);
+    }
+    else
+    {
+        qDebug() << "No project opened !";
+    }
 }
 
 
 void QZoneDessin::next_image() {
-    qDebug() << "Indice " << indice;
-    QString img = getImageForIndex(indice+1);
-    qDebug() << "Image à récupérer : " <<  img;
-    setImageFond(img);
+    if (project != NULL) {
+        qDebug() << "Indice " << indice;
+        QString img = getImageForIndex( (indice < drawings.size() - 1) ? indice+1 : indice);
+        qDebug() << "Image à récupérer : " <<  img;
+        setImageFond(img);
+    }
+    else
+    {
+        qDebug() << "No project opened !";
+    }
 }
 

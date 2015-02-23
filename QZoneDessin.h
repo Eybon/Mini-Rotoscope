@@ -29,6 +29,7 @@ public:
     QString getImageForIndex(int);
 
 private:
+    Project *project;
     std::map<QString, QImage*> drawings;
     bool m_fondActive;
     QImage *m_image;
