@@ -1,5 +1,10 @@
 #include "QZoneDessin.h"
+#include "project.h"
+
+#include <QImageWriter>
 #include <iostream>
+#include <map>
+#include <string>
 
 QZoneDessin::QZoneDessin(QWidget * parent)
 {
@@ -9,6 +14,11 @@ QZoneDessin::QZoneDessin(QWidget * parent)
     m_actif = 0;
     m_position = NULL;
     m_fondActive = true;
+    drawings = std::map<QString, QImage*>();
+
+    m_onionsActive = false;
+    m_onionsLayerNumber = 3;
+
     setImageFond("./resource/gomme.png");
     setColorPen(Qt::black);
     setSizePen(10);
@@ -101,6 +111,8 @@ void QZoneDessin::setColorPen(QColor color)
 void QZoneDessin::setImageFond(QString img)
 {
     m_image = new QImage(img);
+    m_dessin = drawings[img];
+
     this->update();
 }
 
@@ -117,4 +129,52 @@ void QZoneDessin::activeFond()
     this->update();
 }
 
+void QZoneDessin::activateOnions() {
+    m_onionsActive = !m_onionsActive;
+}
 
+void QZoneDessin::loadProject(Project *project) {
+    QStringList filter("*.png");
+    QDir folder(project->getImagesFolder());
+    folder.setFilter(QDir::Files);
+    folder.setSorting(QDir::Name);
+
+    QFileInfoList movieFiles = folder.entryInfoList(filter);
+
+    if (folder.cd("frames")) {
+        qDebug() << "Frames directory available";
+
+        QFileInfoList drawfiles = folder.entryInfoList(filter);
+
+        QProgressDialog progress("Chargement de la zone de dessin...", "Annuler", 0, movieFiles.size() - drawfiles.size(), this);
+        progress.setWindowModality(Qt::WindowModal);
+        progress.setValue(0);
+        progress.show();
+
+        int j = 0;
+
+        for (int i=0; i < movieFiles.size(); i++) {
+            QFileInfo fileInfo = movieFiles.at(i);
+            QFile drawFile(folder.filePath(fileInfo.baseName()) + ".png");
+            if (!drawFile.exists()) {
+                qDebug() << "Need to create picture named : " << drawFile.fileName();
+
+                QImage actualImage = QImage(fileInfo.absoluteFilePath());
+                QImage picture = QImage(actualImage.size(), QImage::Format_RGB32);
+                picture.fill(32);
+                picture.setAlphaChannel(picture);
+
+                QImageWriter imagefile;
+                imagefile.setFileName(drawFile.fileName() + ".png");
+                imagefile.setFormat("png");
+                imagefile.setQuality(100);
+                imagefile.write(picture);
+
+                progress.setValue(++j);
+            }
+            drawings[fileInfo.absoluteFilePath()] = new QImage(drawFile.fileName());
+            qDebug() << "Drawing added for file " << fileInfo.absoluteFilePath();
+        }
+    }
+
+}

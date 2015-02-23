@@ -278,6 +278,7 @@ void MainWindow::openFile() {
     qDebug() << "Project opened : " << project->getName();
 
     framesContainer->loadProject(project);
+    zoneDessin->loadProject(project);
 }
 
 void MainWindow::change_frame(QListWidgetItem *item) {
