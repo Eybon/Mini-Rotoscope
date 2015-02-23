@@ -16,6 +16,9 @@ QZoneDessin::QZoneDessin(QWidget * parent)
     m_fondActive = true;
     drawings = std::map<QString, QImage*>();
 
+    indice = 0;
+    images_amount = 0;
+
     m_onionsActive = false;
     m_onionsLayerNumber = 3;
 
@@ -113,6 +116,9 @@ void QZoneDessin::setImageFond(QString img)
     m_image = new QImage(img);
     m_dessin = drawings[img];
 
+    indice = getCurrentImageIndex(img);
+    qDebug() << "Nouvel indice : " << indice;
+
     this->update();
 }
 
@@ -185,6 +191,47 @@ void QZoneDessin::loadProject(Project *project) {
         }
         drawings[fileInfo.absoluteFilePath()] = new QImage(drawFile.fileName());
         qDebug() << "Drawing added for file " << fileInfo.absoluteFilePath();
+        images_amount++;
     }
 
 }
+
+int QZoneDessin::getCurrentImageIndex(QString img) {
+    int i = 0;
+    for (auto it=drawings.begin(); it!=drawings.end(); it++) {
+        qDebug() << "Comparing " << img << " and " << it->first;
+        if (img == it->first) {
+            qDebug() << "Yes !";
+            return i;
+        }
+        i++;
+    }
+    return -1;
+}
+
+QString QZoneDessin::getImageForIndex(int index) {
+    int i = 0;
+    for (auto it=drawings.begin(); it!=drawings.end(); it++) {
+        if (i == index) {
+            return it->first;
+        }
+        i++;
+    }
+    return NULL;
+}
+
+void QZoneDessin::previous_image() {
+    qDebug() << "Indice " << indice;
+    QString img = getImageForIndex(indice-1);
+    qDebug() << "Image à récupérer : " <<  img;
+    setImageFond(img);
+}
+
+
+void QZoneDessin::next_image() {
+    qDebug() << "Indice " << indice;
+    QString img = getImageForIndex(indice+1);
+    qDebug() << "Image à récupérer : " <<  img;
+    setImageFond(img);
+}
+

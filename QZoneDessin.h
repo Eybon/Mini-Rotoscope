@@ -25,6 +25,8 @@ public:
     void activeFond();
     void loadProject(Project*);
     void activateOnions();
+    int getCurrentImageIndex(QString);
+    QString getImageForIndex(int);
 
 private:
     std::map<QString, QImage*> drawings;
@@ -38,11 +40,16 @@ private:
     bool m_onionsActive;
     int m_onionsLayerNumber;
 
+    int indice;
+    int images_amount;
+
 
 signals:
     void draw();
 
 public slots:
+    void previous_image();
+    void next_image();
 
 };
 

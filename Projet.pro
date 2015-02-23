@@ -42,3 +42,5 @@ FORMS    += mainwindow.ui
 
 OTHER_FILES += \
     ../../../../../Desktop/chrome_japan.mp4
+
+CONFIG += c++11

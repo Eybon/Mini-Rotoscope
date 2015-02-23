@@ -94,6 +94,8 @@ void MainWindow::createDockWindows()
     dock->setWidget(widget);
     addDockWidget(Qt::LeftDockWidgetArea, dock);
 
+    connect(prec, SIGNAL(clicked()), zoneDessin, SLOT(previous_image()));
+    connect(suiv, SIGNAL(clicked()), zoneDessin, SLOT(next_image()));
     connect(crayon, SIGNAL(clicked()), this, SLOT(write()));
     connect(gomme, SIGNAL(clicked()), this, SLOT(clear()));
     connect(couleur, SIGNAL(clicked()), this, SLOT(openPalette()));
