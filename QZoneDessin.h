@@ -24,6 +24,7 @@ public:
     void setImageFond(QString s);
     void activeFond();
     void loadProject(Project*);
+    void activateOnions();
 
 private:
     std::map<QString, QImage*> drawings;

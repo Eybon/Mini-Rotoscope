@@ -141,40 +141,50 @@ void QZoneDessin::loadProject(Project *project) {
 
     QFileInfoList movieFiles = folder.entryInfoList(filter);
 
-    if (folder.cd("frames")) {
-        qDebug() << "Frames directory available";
-
-        QFileInfoList drawfiles = folder.entryInfoList(filter);
-
-        QProgressDialog progress("Chargement de la zone de dessin...", "Annuler", 0, movieFiles.size() - drawfiles.size(), this);
-        progress.setWindowModality(Qt::WindowModal);
-        progress.setValue(0);
-        progress.show();
-
-        int j = 0;
-
-        for (int i=0; i < movieFiles.size(); i++) {
-            QFileInfo fileInfo = movieFiles.at(i);
-            QFile drawFile(folder.filePath(fileInfo.baseName()) + ".png");
-            if (!drawFile.exists()) {
-                qDebug() << "Need to create picture named : " << drawFile.fileName();
-
-                QImage actualImage = QImage(fileInfo.absoluteFilePath());
-                QImage picture = QImage(actualImage.size(), QImage::Format_RGB32);
-                picture.fill(32);
-                picture.setAlphaChannel(picture);
-
-                QImageWriter imagefile;
-                imagefile.setFileName(drawFile.fileName() + ".png");
-                imagefile.setFormat("png");
-                imagefile.setQuality(100);
-                imagefile.write(picture);
-
-                progress.setValue(++j);
-            }
-            drawings[fileInfo.absoluteFilePath()] = new QImage(drawFile.fileName());
-            qDebug() << "Drawing added for file " << fileInfo.absoluteFilePath();
+    if (!folder.cd("frames")) {
+        qDebug() << "mkdir frames required";
+        if (folder.mkdir("frames")) {
+            folder.cd("frames");
         }
+        else
+        {
+            //TODO
+            qDebug() << "Unable to create the subdirectory 'frames' into " << project->getImagesFolder();
+        }
+    }
+
+    qDebug() << "Frames directory available";
+
+    QFileInfoList drawfiles = folder.entryInfoList(filter);
+
+    QProgressDialog progress("Chargement de la zone de dessin...", "Annuler", 0, movieFiles.size() - drawfiles.size(), this);
+    progress.setWindowModality(Qt::WindowModal);
+    progress.setValue(0);
+    progress.show();
+
+    int j = 0;
+
+    for (int i=0; i < movieFiles.size(); i++) {
+        QFileInfo fileInfo = movieFiles.at(i);
+        QFile drawFile(folder.filePath(fileInfo.baseName()) + ".png");
+        if (!drawFile.exists()) {
+            qDebug() << "Need to create picture named : " << drawFile.fileName();
+
+            QImage actualImage = QImage(fileInfo.absoluteFilePath());
+            QImage picture = QImage(actualImage.size(), QImage::Format_RGB32);
+            picture.fill(32);
+            picture.setAlphaChannel(picture);
+
+            QImageWriter imagefile;
+            imagefile.setFileName(drawFile.fileName() + ".png");
+            imagefile.setFormat("png");
+            imagefile.setQuality(100);
+            imagefile.write(picture);
+
+            progress.setValue(++j);
+        }
+        drawings[fileInfo.absoluteFilePath()] = new QImage(drawFile.fileName());
+        qDebug() << "Drawing added for file " << fileInfo.absoluteFilePath();
     }
 
 }

@@ -151,9 +151,11 @@ void MainWindow::createDockWindows()
     framesContainer->verticalScrollBar()->close();
     connect(framesContainer, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(change_frame(QListWidgetItem*)));
 
+    /*
     for (int i = 0; i < 10; i++) {
         framesContainer->addItem(new QListWidgetItem(QIcon("./resource/thumb/riot.png"),"Riot"));
     }
+*/
 
     dockSlide->setWidget(framesContainer);
     addDockWidget(Qt::BottomDockWidgetArea, dockSlide);
