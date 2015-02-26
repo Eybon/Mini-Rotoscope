@@ -29,7 +29,7 @@ QZoneDessin::QZoneDessin(QWidget * parent)
     m_onionsActive = false;
     m_onionsLayerNumber = 3;
 
-    //m_image = new QImage("./resource/gomme.png");
+    m_image = new QImage();
     setColorPen(Qt::black);
     setSizePen(10);
 }
