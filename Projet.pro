@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     newproject.cpp \
     renderingtab.cpp \
     project.cpp \
-    videoprocess.cpp
+    videoprocess.cpp \
+    QFenetreLecture.cpp
 
 HEADERS  += mainwindow.h \
     generaltab.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     newproject.h \
     renderingtab.h \
     project.h \
-    videoprocess.h
+    videoprocess.h \
+    QFenetreLecture.h
 
 FORMS    += mainwindow.ui
 

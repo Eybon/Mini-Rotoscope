@@ -51,11 +51,11 @@ void MainWindow::createDockWindows()
         QWidget *widget = new QWidget(dock);
         QGridLayout *panel = new QGridLayout();
 
-        crayon = new QPushButton();
+        QPushButton *crayon = new QPushButton();
         crayon->setIcon(QIcon("./resource/crayon.png"));
         crayon->setMinimumSize(QSize(60,60));
 
-        gomme = new QPushButton();
+        QPushButton *gomme = new QPushButton();
         gomme->setIcon(QIcon("./resource/gomme.png"));
         gomme->setMinimumSize(QSize(60,60));
 
@@ -77,7 +77,7 @@ void MainWindow::createDockWindows()
 
         palette = new QColorDialog(widget);
 
-        couleur = new QPushButton();
+        QPushButton *couleur = new QPushButton();
         couleur->setIcon(QIcon("./resource/palette.png"));
         couleur->setMinimumSize(QSize(60,120));
 
@@ -110,23 +110,23 @@ void MainWindow::createDockWindows()
         QWidget *widgetConf = new QWidget(dock);
         QVBoxLayout *panelConf = new QVBoxLayout();
 
-        pelureOignons = new QPushButton();
+        QPushButton *pelureOignons = new QPushButton();
         pelureOignons->setMinimumSize(QSize(60,60));
         pelureOignons->setIcon(QIcon("./resource/oignons.png"));
 
-        lectureVideo = new QPushButton("Lec");
+        QPushButton *lectureVideo = new QPushButton("Lec");
         lectureVideo->setMinimumSize(QSize(60,60));
         //lectureVideo->setIcon(QIcon(""));
 
-        imageFond = new QPushButton();
+        QPushButton *imageFond = new QPushButton();
         imageFond->setMinimumSize(QSize(60,60));
         imageFond->setIcon(QIcon("./resource/paysage.PNG"));
 
-        exportVideo = new QPushButton("Exp");
+        QPushButton *exportVideo = new QPushButton("Exp");
         exportVideo->setMinimumSize(QSize(60,60));
         //exportVideo->setIcon(QIcon("./resource/oignons.png"));
 
-        aide = new QPushButton("?");
+        QPushButton *aide = new QPushButton("?");
         aide->setMinimumSize(QSize(60,60));
         //aide->setIcon(QIcon("./resource/oignons.png"));
 
@@ -144,6 +144,7 @@ void MainWindow::createDockWindows()
     addDockWidget(Qt::RightDockWidgetArea, dockConf);
 
     connect(imageFond, SIGNAL(clicked()), this, SLOT(activeFond()));
+    connect(lectureVideo, SIGNAL(clicked()), zoneDessin, SLOT(lecture()));
 
     /* panel du bas  */
     QDockWidget *dockSlide = new QDockWidget(tr(""), this);
@@ -213,6 +214,7 @@ void MainWindow::createActions()
     enregistrerSousAct->setStatusTip(tr("Enregistrer le projet"));
     enregistrerSousAct->setShortcut( QKeySequence( tr("Ctrl+Alt+S") ) );
     connect(enregistrerSousAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    enregistrerSousAct->setEnabled(false);
 
     //menu fichier -> exporter
     exporterAct = new QAction(tr("&Exporter"), this);
@@ -220,6 +222,7 @@ void MainWindow::createActions()
     exporterAct->setStatusTip(tr("Exporter le projet"));
     exporterAct->setShortcut( QKeySequence( tr("Ctrl+E") ) );
     connect(exporterAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    exporterAct->setEnabled(false);
 
     //menu fichier -> quitter
     quitterAct = new QAction(tr("&Quitter"), this);
@@ -227,6 +230,7 @@ void MainWindow::createActions()
     quitterAct->setStatusTip(tr("Quitter l'application"));
     quitterAct->setShortcut( QKeySequence( tr("Ctrl+W") ) );
     connect(quitterAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    quitterAct->setEnabled(false);
 
     //menu fichier -> annuler
     annulerAct = new QAction(tr("&Annuler"), this);
@@ -234,6 +238,7 @@ void MainWindow::createActions()
     annulerAct->setStatusTip(tr("Annuler"));
     annulerAct->setShortcut( QKeySequence( tr("Ctrl+Z") ) );
     connect(annulerAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    annulerAct->setEnabled(false);
 
     //menu fichier -> revenir
     revenirAct = new QAction(tr("&Revenir"), this);
@@ -241,6 +246,7 @@ void MainWindow::createActions()
     revenirAct->setStatusTip(tr("Revenir"));
     revenirAct->setShortcut( QKeySequence( tr("Ctrl+Y") ) );
     connect(revenirAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    revenirAct->setEnabled(false);
 
     //menu fichier -> zoom
     zoomAct = new QAction(tr("&Zoom"), this);
@@ -248,6 +254,7 @@ void MainWindow::createActions()
     zoomAct->setStatusTip(tr("Zoom"));
     zoomAct->setShortcut( QKeySequence( tr("") ) );
     connect(zoomAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    zoomAct->setEnabled(false);
 
     //menu fichier -> copier
     copierAct = new QAction(tr("&Copier"), this);
@@ -255,6 +262,7 @@ void MainWindow::createActions()
     copierAct->setStatusTip(tr("Copier"));
     copierAct->setShortcut( QKeySequence( tr("Ctrl+C") ) );
     connect(copierAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    copierAct->setEnabled(false);
 
     //menu fichier -> coller
     collerAct = new QAction(tr("&Coller"), this);
@@ -262,6 +270,7 @@ void MainWindow::createActions()
     collerAct->setStatusTip(tr("Coller"));
     collerAct->setShortcut( QKeySequence( tr("Ctrl+V") ) );
     connect(collerAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    collerAct->setEnabled(false);
 }
 
 void MainWindow::newFile() {

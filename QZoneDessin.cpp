@@ -5,6 +5,11 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <unistd.h>
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>
+
+#include "QFenetreLecture.h"
 
 QZoneDessin::QZoneDessin(QWidget * parent)
 {
@@ -24,7 +29,7 @@ QZoneDessin::QZoneDessin(QWidget * parent)
     m_onionsActive = false;
     m_onionsLayerNumber = 3;
 
-    m_image = new QImage("./resource/gomme.png");
+    //m_image = new QImage("./resource/gomme.png");
     setColorPen(Qt::black);
     setSizePen(10);
 }
@@ -264,4 +269,25 @@ QString QZoneDessin::convertToFramePath(QString s){
     list.insert(list.length()-1,"frames");
 
     return list.join("/");
+}
+
+void QZoneDessin::lecture(){
+    std::vector<QImage*> list;
+    int size = drawings.size();
+    qDebug() << "Nombre d'image : " << size;
+    for(int i=0;i<size;i++)
+    {
+        QString current = getImageForIndex(i);
+        list.push_back(new QImage(current));
+        qDebug() << "image : " << current ;
+    }
+    qDebug() << "Chargement pour lecture ok !";
+    QFenetreLecture *lecture = new QFenetreLecture(list);
+    lecture->show();
+    lecture->lecture();
+    /*for(int i=0;i<list.size();i++)
+    {
+        lecture->setImage(*(list.at(i)));
+        sleep(1);
+    }*/
 }

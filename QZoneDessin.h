@@ -53,7 +53,7 @@ public slots:
     void previous_image();
     void next_image();
     void saveProject();
-
+    void lecture();
 };
 
 #endif

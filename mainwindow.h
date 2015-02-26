@@ -42,17 +42,6 @@ private:
     QAction *collerAct;
 
     QZoneDessin *zoneDessin;
-
-    QPushButton *gomme;
-    QPushButton *crayon;
-
-    QPushButton *pelureOignons;
-    QPushButton *lectureVideo;
-    QPushButton *imageFond;
-    QPushButton *exportVideo;
-    QPushButton *aide;
-
-    QPushButton *couleur;
     QColorDialog *palette;
 
 signals:
