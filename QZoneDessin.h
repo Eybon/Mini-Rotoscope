@@ -27,6 +27,7 @@ public:
     void activateOnions();
     int getCurrentImageIndex(QString);
     QString getImageForIndex(int);
+    QString convertToFramePath(QString);
 
 private:
     Project *project;
@@ -51,6 +52,7 @@ signals:
 public slots:
     void previous_image();
     void next_image();
+    void saveProject();
 
 };
 

@@ -243,3 +243,25 @@ void QZoneDessin::next_image() {
     }
 }
 
+void QZoneDessin::saveProject()
+{
+    int i=0;
+    for(auto it=drawings.begin();it!=drawings.end();it++)
+    {
+
+        QImageWriter imagefile(convertToFramePath(it->first)+".png");
+        imagefile.setFormat("png");
+        imagefile.setQuality(100);
+        qDebug() << "Image à enregistrer : " <<  convertToFramePath(it->first);
+        imagefile.write(*(it->second));
+        i++;
+    }
+}
+
+QString QZoneDessin::convertToFramePath(QString s){
+    QStringList list = s.split('/');
+    QString tmp = list.at(list.length()-1);
+    list.insert(list.length()-1,"frames");
+
+    return list.join("/");
+}

@@ -205,7 +205,7 @@ void MainWindow::createActions()
     enregistrerAct->setShortcuts(QKeySequence::New);
     enregistrerAct->setStatusTip(tr("Enregistrer le projet"));
     enregistrerAct->setShortcut( QKeySequence( tr("Ctrl+S") ) );
-    connect(enregistrerAct, SIGNAL(triggered()), this, SLOT(newFile()));
+    connect(enregistrerAct, SIGNAL(triggered()), zoneDessin, SLOT(saveProject()));
 
     //menu fichier -> enregistrer sous
     enregistrerSousAct = new QAction(tr("&Enregistrer sous ... "), this);
