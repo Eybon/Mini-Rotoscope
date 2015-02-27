@@ -122,6 +122,8 @@ void QZoneDessin::setImageFond(QString img)
 {
     m_image = new QImage(img);
     m_dessin = drawings[img];
+    //m_dessin = new QImage(m_dessin->scaled(this->size()));
+    //m_image = new QImage(m_image->scaled(this->size()));
 
     indice = getCurrentImageIndex(img);
     qDebug() << "Nouvel indice : " << indice;
@@ -278,7 +280,8 @@ void QZoneDessin::lecture(){
     for(int i=0;i<size;i++)
     {
         QString current = getImageForIndex(i);
-        list.push_back(new QImage(current));
+        QImage *img = drawings[current];
+        list.push_back(img);
         qDebug() << "image : " << current ;
     }
     qDebug() << "Chargement pour lecture ok !";

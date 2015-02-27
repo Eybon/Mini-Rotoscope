@@ -54,32 +54,39 @@ void MainWindow::createDockWindows()
         QPushButton *crayon = new QPushButton();
         crayon->setIcon(QIcon("./resource/crayon.png"));
         crayon->setMinimumSize(QSize(60,60));
+        crayon->setIconSize( QSize( 60,60 ));
 
         QPushButton *gomme = new QPushButton();
         gomme->setIcon(QIcon("./resource/gomme.png"));
         gomme->setMinimumSize(QSize(60,60));
+        gomme->setIconSize( QSize( 60,60 ));
 
         QPushButton *prec = new QPushButton();
         prec->setIcon(QIcon("./resource/gauche.png"));
         prec->setMinimumSize(QSize(60,60));
+        prec->setIconSize( QSize( 60,60 ));
 
         QPushButton *suiv = new QPushButton();
         suiv->setIcon(QIcon("./resource/droite.png"));
         suiv->setMinimumSize(QSize(60,60));
+        suiv->setIconSize( QSize( 60,60 ));
 
-        QPushButton *small = new QPushButton("Petit");
+        QPushButton *small = new QPushButton("o");
         //gomme->setIcon(QIcon("./resource/gomme.png"));
         small->setMinimumSize(QSize(60,60));
+        small->setIconSize( QSize( 60,60 ));
 
-        QPushButton *big = new QPushButton("Gros");
+        QPushButton *big = new QPushButton("O");
         //gomme->setIcon(QIcon("./resource/gomme.png"));
         big->setMinimumSize(QSize(60,60));
+        big->setIconSize( QSize( 60,60 ));
 
         palette = new QColorDialog(widget);
 
         QPushButton *couleur = new QPushButton();
         couleur->setIcon(QIcon("./resource/palette.png"));
         couleur->setMinimumSize(QSize(60,120));
+        couleur->setIconSize( QSize( 60,120 ));
 
         panel->addWidget(prec,0,0);
         panel->addWidget(suiv,0,1);
@@ -113,22 +120,27 @@ void MainWindow::createDockWindows()
         QPushButton *pelureOignons = new QPushButton();
         pelureOignons->setMinimumSize(QSize(60,60));
         pelureOignons->setIcon(QIcon("./resource/oignons.png"));
+        pelureOignons->setIconSize( QSize( 60,60 ));
 
-        QPushButton *lectureVideo = new QPushButton("Lec");
+        QPushButton *lectureVideo = new QPushButton("");
         lectureVideo->setMinimumSize(QSize(60,60));
-        //lectureVideo->setIcon(QIcon(""));
+        lectureVideo->setIcon(QIcon("./resource/play.png"));
+        lectureVideo->setIconSize( QSize( 60,60 ));
 
         QPushButton *imageFond = new QPushButton();
         imageFond->setMinimumSize(QSize(60,60));
         imageFond->setIcon(QIcon("./resource/paysage.PNG"));
+        imageFond->setIconSize( QSize( 60,60 ));
 
         QPushButton *exportVideo = new QPushButton("Exp");
         exportVideo->setMinimumSize(QSize(60,60));
         //exportVideo->setIcon(QIcon("./resource/oignons.png"));
 
-        QPushButton *aide = new QPushButton("?");
+        QPushButton *aide = new QPushButton("");
         aide->setMinimumSize(QSize(60,60));
-        //aide->setIcon(QIcon("./resource/oignons.png"));
+        aide->setIcon(QIcon("./resource/help.png"));
+        aide->setIconSize( QSize( 60,60 ));
+        aide->setEnabled(false);
 
         panelConf->addStretch();
         panelConf->addWidget(pelureOignons);

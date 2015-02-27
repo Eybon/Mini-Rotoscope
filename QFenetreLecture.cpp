@@ -28,7 +28,7 @@ void QFenetreLecture::lecture(){
         QTimer *timer = new QTimer();
         connect(timer, SIGNAL(timeout()), this, SLOT(setNextImage()));
         timer->start(time);
-        time += 200;
+        time += 2000;
     }
 }
 
