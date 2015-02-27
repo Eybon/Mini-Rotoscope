@@ -165,7 +165,7 @@ void MainWindow::createDockWindows()
     this->framesContainer = new FramesContainerWindow();
     framesContainer->verticalScrollBar()->close();
     connect(framesContainer, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(change_frame(QListWidgetItem*)));
-
+    connect(pelureOignons, SIGNAL(clicked()), zoneDessin, SLOT(activateOnions()));
     /*
     for (int i = 0; i < 10; i++) {
         framesContainer->addItem(new QListWidgetItem(QIcon("./resource/thumb/riot.png"),"Riot"));

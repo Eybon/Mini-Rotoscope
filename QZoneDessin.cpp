@@ -55,6 +55,13 @@ void QZoneDessin::paintEvent(QPaintEvent * e)
     {
         p.setOpacity(1);
         p.drawImage(0,0,*m_image);
+        if (m_onionsActive) {
+            int min = (indice - m_onionsLayerNumber >= 0) ? indice - m_onionsLayerNumber : 0;
+            for (int i = min; i < indice; i++) {
+                p.setOpacity(0.4);
+                p.drawImage(0,0,*drawings[getImageForIndex(i)]);
+            }
+        }
         p.setOpacity(0.5);
         p.drawImage(0,0,*m_dessin);
     }
@@ -62,6 +69,13 @@ void QZoneDessin::paintEvent(QPaintEvent * e)
     {
         p.setOpacity(0);
         p.drawImage(0,0,*m_image);
+        if (m_onionsActive) {
+            int min = (indice - m_onionsLayerNumber >= 0) ? indice - m_onionsLayerNumber : 0;
+            for (int i = min; i < indice; i++) {
+                p.setOpacity(0.7);
+                p.drawImage(0,0,*drawings[getImageForIndex(i)]);
+            }
+        }
         p.setOpacity(1);
         p.drawImage(0,0,*m_dessin);
     }
@@ -139,6 +153,7 @@ void QZoneDessin::activeFond()
 
 void QZoneDessin::activateOnions() {
     m_onionsActive = !m_onionsActive;
+    qDebug() << "Statut des oignons : " << m_onionsActive;
 }
 
 void QZoneDessin::loadProject(Project *project) {

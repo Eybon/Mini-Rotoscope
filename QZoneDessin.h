@@ -24,7 +24,6 @@ public:
     void setImageFond(QString s);
     void activeFond();
     void loadProject(Project*);
-    void activateOnions();
     int getCurrentImageIndex(QString);
     QString getImageForIndex(int);
     QString convertToFramePath(QString);
@@ -54,6 +53,8 @@ public slots:
     void next_image();
     void saveProject();
     void lecture();
+    void activateOnions();
+
 };
 
 #endif
