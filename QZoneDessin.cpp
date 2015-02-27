@@ -197,6 +197,7 @@ void QZoneDessin::loadProject(Project *project) {
     }
 
     this->project = project;
+    this->setImageFond(getImageForIndex(0));
 }
 
 int QZoneDessin::getCurrentImageIndex(QString img) {
@@ -252,6 +253,11 @@ void QZoneDessin::next_image() {
 
 void QZoneDessin::saveProject()
 {
+    QProgressDialog progress("Enregistrement des images...", "Annuler", 0, drawings.size(), this);
+    progress.setWindowModality(Qt::WindowModal);
+    progress.setValue(0);
+    progress.show();
+
     int i=0;
     for(auto it=drawings.begin();it!=drawings.end();it++)
     {
@@ -262,6 +268,8 @@ void QZoneDessin::saveProject()
         qDebug() << "Image à enregistrer : " <<  convertToFramePath(it->first);
         imagefile.write(*(it->second));
         i++;
+
+        progress.setValue(i);
     }
 }
 
