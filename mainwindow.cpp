@@ -12,6 +12,7 @@
 #include <QFileDialog>
 #include <QWidget>
 #include <QFileInfo>
+#include <QLineEdit>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -51,6 +52,13 @@ void MainWindow::createDockWindows()
         QWidget *widget = new QWidget(dock);
         QGridLayout *panel = new QGridLayout();
 
+        this->gotoVal = new QLineEdit();
+        gotoVal->setValidator( new QIntValidator(0, 100, this) );
+        gotoVal->setMaximumWidth(60);
+
+        QPushButton *gotoButton = new QPushButton();
+        gotoButton->setText(tr("Goto !"));
+
         QPushButton *crayon = new QPushButton();
         crayon->setIcon(QIcon("./resource/crayon.png"));
         crayon->setMinimumSize(QSize(60,60));
@@ -88,19 +96,24 @@ void MainWindow::createDockWindows()
         couleur->setMinimumSize(QSize(60,120));
         couleur->setIconSize( QSize( 60,120 ));
 
-        panel->addWidget(prec,0,0);
-        panel->addWidget(suiv,0,1);
-        panel->addWidget(crayon,1,0);
-        panel->addWidget(gomme,2,0);
-        panel->addWidget(couleur,3,0,1,2);
-        panel->addWidget(small,1,1);
-        panel->addWidget(big,2,1);
-        panel->setRowStretch(4,15);
+        panel->addWidget(gotoVal, 0,0);
+        panel->addWidget(gotoButton, 0,1);
+        panel->addWidget(prec,1,0);
+        panel->addWidget(suiv,1,1);
+        panel->addWidget(crayon,2,0);
+        panel->addWidget(gomme,3,0);
+        panel->addWidget(couleur,4,0,1,2);
+        panel->addWidget(small,2,1);
+        panel->addWidget(big,3,1);
+        panel->setRowStretch(5,15);
         widget->setLayout(panel);
 
     dock->setWidget(widget);
     addDockWidget(Qt::LeftDockWidgetArea, dock);
 
+    connect(gotoButton, SIGNAL(clicked()), this, SLOT(prepare_goto_signal()));
+    connect(gotoVal, SIGNAL(returnPressed()), this, SLOT(prepare_goto_signal()));
+    connect(this, SIGNAL(send_goto_signal(int)), zoneDessin, SLOT(go_to(int)));
     connect(prec, SIGNAL(clicked()), zoneDessin, SLOT(previous_image()));
     connect(suiv, SIGNAL(clicked()), zoneDessin, SLOT(next_image()));
     connect(crayon, SIGNAL(clicked()), this, SLOT(write()));
@@ -165,6 +178,10 @@ void MainWindow::createDockWindows()
     this->framesContainer = new FramesContainerWindow();
     framesContainer->verticalScrollBar()->close();
     connect(framesContainer, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(change_frame(QListWidgetItem*)));
+    //TRY
+    connect(framesContainer, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(change_frame(QListWidgetItem*)));
+    connect(framesContainer, SIGNAL(itemEntered(QListWidgetItem*)), this, SLOT(change_frame(QListWidgetItem*)));
+
     connect(pelureOignons, SIGNAL(clicked()), zoneDessin, SLOT(activateOnions()));
     /*
     for (int i = 0; i < 10; i++) {
@@ -304,11 +321,18 @@ void MainWindow::openFile() {
 
     framesContainer->loadProject(project);
     zoneDessin->loadProject(project);
+    gotoVal->setValidator( new QIntValidator(0, zoneDessin->getImagesAmount(), this) );
+
 }
 
 void MainWindow::change_frame(QListWidgetItem *item) {
     qDebug() << "[focus] " << item->data(Qt::DisplayRole).toString();
     this->zoneDessin->setImageFond(item->data(Qt::DisplayRole).toString());
+}
+
+void MainWindow::prepare_goto_signal() {
+    int gotoIndex = gotoVal->text().toInt();
+    emit send_goto_signal(gotoIndex);
 }
 
 MainWindow::~MainWindow()

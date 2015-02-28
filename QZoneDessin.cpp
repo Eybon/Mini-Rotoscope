@@ -198,8 +198,6 @@ void QZoneDessin::loadProject(Project *project) {
     progress.setValue(0);
     progress.show();
 
-    int j = 0;
-
     for (int i=0; i < movieFiles.size(); i++) {
         QFileInfo fileInfo = movieFiles.at(i);
         QFile drawFile(folder.filePath(fileInfo.baseName()) + ".png");
@@ -212,17 +210,16 @@ void QZoneDessin::loadProject(Project *project) {
             picture.setAlphaChannel(picture);
 
             QImageWriter imagefile;
-            imagefile.setFileName(drawFile.fileName() + ".png");
+            imagefile.setFileName(drawFile.fileName());
             imagefile.setFormat("png");
             imagefile.setQuality(100);
             imagefile.write(picture);
-
-            progress.setValue(++j);
         }
         drawings[fileInfo.absoluteFilePath()] = new QImage(drawFile.fileName());
         qDebug() << "Drawing added for file " << fileInfo.absoluteFilePath();
         initialisationImage();
         images_amount++;
+        progress.setValue(i);
     }
 
     this->project = project;
@@ -243,12 +240,14 @@ int QZoneDessin::getCurrentImageIndex(QString img) {
 }
 
 QString QZoneDessin::getImageForIndex(int index) {
-    int i = 0;
-    for (auto it=drawings.begin(); it!=drawings.end(); it++) {
-        if (i == index) {
-            return it->first;
+    if (index >= 0) {
+        int i = 0;
+        for (auto it=drawings.begin(); it!=drawings.end(); it++) {
+            if (i == index) {
+                return it->first;
+            }
+            i++;
         }
-        i++;
     }
     return NULL;
 }
@@ -310,6 +309,13 @@ QString QZoneDessin::convertToFramePath(QString s){
     return list.join("/");
 }
 
+void QZoneDessin::go_to(int index) {
+    qDebug() << "Goto received";
+    if (project != NULL) {
+        setImageFond(getImageForIndex(index-1));
+    }
+}
+
 void QZoneDessin::lecture(){
     std::vector<QImage*> list;
     int size = drawings.size();
@@ -330,4 +336,8 @@ void QZoneDessin::lecture(){
         lecture->setImage(*(list.at(i)));
         sleep(1);
     }*/
+}
+
+int QZoneDessin::getImagesAmount() {
+    return images_amount;
 }

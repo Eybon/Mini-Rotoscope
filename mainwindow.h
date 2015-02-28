@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLineEdit>
+
 #include "QZoneDessin.h"
 #include "framescontainerwindow.h"
 
@@ -41,11 +43,13 @@ private:
     QAction *copierAct;
     QAction *collerAct;
 
+    QLineEdit *gotoVal;
+
     QZoneDessin *zoneDessin;
     QColorDialog *palette;
 
 signals:
-
+    void send_goto_signal(int);
 
 public slots:
     void newFile();
@@ -57,7 +61,7 @@ public slots:
     void bigPen(){zoneDessin->setSizePen(30);}
     void color(QColor c){zoneDessin->setColorPen(c);}
     void activeFond(){zoneDessin->activeFond();}
-
+    void prepare_goto_signal();
     void change_frame(QListWidgetItem*);
 };
 

@@ -28,7 +28,7 @@ public:
     QString getImageForIndex(int);
     QString convertToFramePath(QString);
     void initialisationImage();
-
+    int getImagesAmount();
 private:
     Project *project;
     std::map<QString, QImage*> drawings;
@@ -55,6 +55,7 @@ public slots:
     void saveProject();
     void lecture();
     void activateOnions();
+    void go_to(int);
 
 };
 
