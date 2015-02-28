@@ -27,6 +27,7 @@ public:
     int getCurrentImageIndex(QString);
     QString getImageForIndex(int);
     QString convertToFramePath(QString);
+    void initialisationImage();
 
 private:
     Project *project;

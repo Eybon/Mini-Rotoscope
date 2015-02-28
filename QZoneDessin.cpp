@@ -34,6 +34,18 @@ QZoneDessin::QZoneDessin(QWidget * parent)
     setSizePen(10);
 }
 
+void QZoneDessin::initialisationImage()
+{
+    int size = drawings.size();
+    for(int i = 0;i<size;i++)
+    {
+        QString s = getImageForIndex(i);
+        QPainter painter(drawings[s]);
+        painter.fillRect(0,0,(drawings[s])->width(),(drawings[s])->height(),Qt::white);
+    }
+}
+
+
 void QZoneDessin::resizeEvent(QResizeEvent * e)
 {
     if(m_dessin == NULL)
@@ -55,29 +67,29 @@ void QZoneDessin::paintEvent(QPaintEvent * e)
     {
         p.setOpacity(1);
         p.drawImage(0,0,*m_image);
+        p.setOpacity(0.5);
+        p.drawImage(0,0,*m_dessin);
         if (m_onionsActive) {
             int min = (indice - m_onionsLayerNumber >= 0) ? indice - m_onionsLayerNumber : 0;
             for (int i = min; i < indice; i++) {
-                p.setOpacity(0.4);
+                p.setOpacity(0.1);
                 p.drawImage(0,0,*drawings[getImageForIndex(i)]);
             }
         }
-        p.setOpacity(0.5);
-        p.drawImage(0,0,*m_dessin);
     }
     else
     {
-        p.setOpacity(0);
-        p.drawImage(0,0,*m_image);
+        //p.setOpacity(0);
+        //p.drawImage(0,0,*m_image);
+        p.setOpacity(1);
+        p.drawImage(0,0,*m_dessin);
         if (m_onionsActive) {
             int min = (indice - m_onionsLayerNumber >= 0) ? indice - m_onionsLayerNumber : 0;
             for (int i = min; i < indice; i++) {
-                p.setOpacity(0.7);
+                p.setOpacity(0.2);
                 p.drawImage(0,0,*drawings[getImageForIndex(i)]);
             }
         }
-        p.setOpacity(1);
-        p.drawImage(0,0,*m_dessin);
     }
 }
 
@@ -154,6 +166,7 @@ void QZoneDessin::activeFond()
 void QZoneDessin::activateOnions() {
     m_onionsActive = !m_onionsActive;
     qDebug() << "Statut des oignons : " << m_onionsActive;
+    this->update();
 }
 
 void QZoneDessin::loadProject(Project *project) {
@@ -208,6 +221,7 @@ void QZoneDessin::loadProject(Project *project) {
         }
         drawings[fileInfo.absoluteFilePath()] = new QImage(drawFile.fileName());
         qDebug() << "Drawing added for file " << fileInfo.absoluteFilePath();
+        initialisationImage();
         images_amount++;
     }
 
