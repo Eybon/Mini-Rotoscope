@@ -6,6 +6,7 @@
 
 #include "QZoneDessin.h"
 #include "framescontainerwindow.h"
+#include "project.h"
 
 namespace Ui {
 class MainWindow;
@@ -26,6 +27,7 @@ public:
 private:
     Ui::MainWindow *ui;
     FramesContainerWindow *framesContainer;
+    Project *project;
 
     /*Menu et Action des Menus File et Edit*/
     QMenu *fileMenu;
@@ -53,6 +55,7 @@ signals:
     void send_goto_signal(int);
     void send_onions_changed_signal(int);
     void send_lecture_signal(int);
+    void start_video_rendering(QString);
 
 public slots:
     void newFile();
@@ -68,6 +71,9 @@ public slots:
     void prepare_onions_changed_signal();
     void prepare_lecture_signal();
     void change_frame(QListWidgetItem*);
+    void exportMovie();
+    void end_export_movie();
+
 };
 
 #endif // MAINWINDOW_H

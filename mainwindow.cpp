@@ -21,6 +21,7 @@
 #include "framescontainerwindow.h"
 #include "newproject.h"
 #include "project.h"
+#include "videoProcess.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -178,6 +179,7 @@ void MainWindow::createDockWindows()
     connect(this, SIGNAL(send_lecture_signal(int)), zoneDessin, SLOT(lecture(int)));
     connect(pelureOignons, SIGNAL(clicked()), zoneDessin, SLOT(activateOnions()));
     connect(onionsAmount, SIGNAL(returnPressed()), this, SLOT(prepare_onions_changed_signal()));
+    connect(exportVideo, SIGNAL(clicked()), this, SLOT(exportMovie()));
     connect(this, SIGNAL(send_onions_changed_signal(int)), zoneDessin, SLOT(onions_changed(int)));
 
     /* panel du bas  */
@@ -328,6 +330,8 @@ void MainWindow::openFile() {
 
     framesContainer->loadProject(project);
     zoneDessin->loadProject(project);
+    this->project = project;
+
     gotoVal->setValidator( new QIntValidator(0, zoneDessin->getImagesAmount(), this) );
 
 }
@@ -360,6 +364,40 @@ void MainWindow::prepare_lecture_signal() {
         msgBox.setText("La valeur doit être comprise entre 1 et le nombre d'images comprises dans le projet.");
         msgBox.exec();
     }
+}
+
+void MainWindow::exportMovie() {
+    if (this->project != NULL) {
+        connect(this, SIGNAL(project_file_created()), this, SLOT(project_file_step()));
+
+        QProgressDialog dialog("Export du projet", "Annuler", 0, 1, this);
+        dialog.setWindowModality(Qt::WindowModal);
+        dialog.show();
+
+        //connect(dialog, SIGNAL(canceled()), this, SLOT(cancel()));
+
+        qDebug() << "--- Rendering a project : Start ---";
+
+        QThread *videoProcessingThread = new QThread();
+        VideoProcess *videoProcess = new VideoProcess(this->project);
+
+        videoProcess->moveToThread(videoProcessingThread);
+        connect(this, SIGNAL(start_video_rendering(QString)), videoProcess, SLOT(start_video_rendering(QString)));
+        //connect(videoProcess, SIGNAL(finished()), this, SLOT(video_rendering_step()));
+        connect(videoProcess, SIGNAL(finished()), videoProcessingThread, SLOT(quit()));
+        connect(videoProcess, SIGNAL(finished()), videoProcess, SLOT(deleteLater()));
+        connect(videoProcess, SIGNAL(finished()), this, SLOT(end_export_movie()));
+        connect(videoProcess, SIGNAL(finished()), videoProcessingThread, SLOT(deleteLater()));
+
+        videoProcessingThread->start();
+
+        QString drawMovie(QFileDialog::getSaveFileName(this, tr("Export des dessins avec le film"), tr("drawing.mp4"), tr("Fichier video (*.mp4)")));
+        emit start_video_rendering(drawMovie);
+    }
+}
+
+void MainWindow::end_export_movie() {
+    QMessageBox::information(this, tr("Export des dessins"), tr("La vidéo a été générée à partir des dessins avec succès"));
 }
 
 MainWindow::~MainWindow()

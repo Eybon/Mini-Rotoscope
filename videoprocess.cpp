@@ -1,11 +1,14 @@
 #include <QFileInfo>
 #include <QStringList>
 #include <QProcess>
+#include <QMessageBox>
+#include <QDir>
+#include <QFileDialog>
 
 #include "videoprocess.h"
 #include "project.h"
 
-VideoProcess::VideoProcess(Project *project) : QObject()
+VideoProcess::VideoProcess(Project *project) : QObject(0)
 {
     this->project = project;
 }
@@ -45,4 +48,29 @@ void VideoProcess::start_video_processing() {
     emit step_passed();
 
     emit finished();
+}
+
+void VideoProcess::start_video_rendering(QString outputfile) {
+
+    qDebug() << "Video rendering started";
+
+    if(!outputfile.endsWith(".mp4")){
+        outputfile += ".mp4";
+    }
+
+    // Export
+    QStringList args;
+    args << "-r" << QString::number(project->getFramerate());
+    args << "-i" << "projet-%03d.png";
+    args << outputfile;
+
+    QProcess command;
+    QDir dir(this->project->getImagesFolder());
+    dir.cd("frames");
+
+    command.setWorkingDirectory(dir.absolutePath());
+    command.start(this->project->getVideoProcessingFolder(), args);
+    command.waitForFinished(-1);
+
+    qDebug() << "Video rendering finished";
 }

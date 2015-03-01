@@ -20,6 +20,7 @@ private:
 private slots:
     //Listen for the beginning of the video processing
     void start_video_processing();
+    void start_video_rendering(QString);
 
 signals:
     //emit when video processing is over

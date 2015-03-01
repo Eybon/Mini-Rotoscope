@@ -108,6 +108,12 @@ QString Project::toFile( QFile *file ) {
     QDomText nameText = doc.createTextNode(this->name);
     name.appendChild(nameText);
 
+    // <program>
+    QDomElement program = doc.createElement("program");
+    site.appendChild(program);
+    QDomText programText = doc.createTextNode(this->videoProcessingFolder);
+    program.appendChild(programText);
+
     // <video>
     QDomElement video = doc.createElement("video");
     site.appendChild(video);
@@ -181,6 +187,11 @@ Project* Project::fromFile(QString filename) {
                 if(element.tagName() == "name")
                 {
                    project->setName(element.text());
+                }
+                // <program>
+                else if(element.tagName() == "program")
+                {
+                    project->setVideoProcessingFolder(element.text());
                 }
                 // <video>
                 else if(element.tagName() == "video")
