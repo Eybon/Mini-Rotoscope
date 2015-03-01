@@ -73,6 +73,7 @@ public slots:
     void change_frame(QListWidgetItem*);
     void exportMovie();
     void end_export_movie();
+    void setSizePen(QString q){zoneDessin->setSizePen(q.toInt());}
 
 };
 

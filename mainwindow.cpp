@@ -21,7 +21,7 @@
 #include "framescontainerwindow.h"
 #include "newproject.h"
 #include "project.h"
-#include "videoProcess.h"
+#include "videoprocess.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -80,6 +80,7 @@ void MainWindow::createDockWindows()
         suiv->setMinimumSize(QSize(60,60));
         suiv->setIconSize( QSize( 60,60 ));
 
+        /*
         QPushButton *small = new QPushButton("o");
         //gomme->setIcon(QIcon("./resource/gomme.png"));
         small->setMinimumSize(QSize(60,60));
@@ -89,6 +90,15 @@ void MainWindow::createDockWindows()
         //gomme->setIcon(QIcon("./resource/gomme.png"));
         big->setMinimumSize(QSize(60,60));
         big->setIconSize( QSize( 60,60 ));
+        */
+
+        QLabel *label = new QLabel("Taille de l'outil :");
+        label->setMinimumSize(QSize(60,60));
+
+        QLineEdit *size = new QLineEdit();
+        size->setMinimumSize(QSize(60,60));
+        size->setMaximumWidth(60);
+        size->setValidator( new QIntValidator(1,50, this) );
 
         palette = new QColorDialog(widget);
 
@@ -103,9 +113,11 @@ void MainWindow::createDockWindows()
         panel->addWidget(suiv,1,1);
         panel->addWidget(crayon,2,0);
         panel->addWidget(gomme,3,0);
+        panel->addWidget(label,2,1);
+        panel->addWidget(size,3,1);
         panel->addWidget(couleur,4,0,1,2);
-        panel->addWidget(small,2,1);
-        panel->addWidget(big,3,1);
+        //panel->addWidget(small,2,1);
+        //panel->addWidget(big,3,1);
         panel->setRowStretch(5,15);
         widget->setLayout(panel);
 
@@ -120,8 +132,9 @@ void MainWindow::createDockWindows()
     connect(crayon, SIGNAL(clicked()), this, SLOT(write()));
     connect(gomme, SIGNAL(clicked()), this, SLOT(clear()));
     connect(couleur, SIGNAL(clicked()), this, SLOT(openPalette()));
-    connect(small, SIGNAL(clicked()), this, SLOT(smallPen()));
-    connect(big, SIGNAL(clicked()), this, SLOT(bigPen()));
+    /*connect(small, SIGNAL(clicked()), this, SLOT(smallPen()));
+    connect(big, SIGNAL(clicked()), this, SLOT(bigPen()));*/
+    connect(size, SIGNAL(textEdited(QString)),this,SLOT(setSizePen(QString)));
     connect(palette, SIGNAL(colorSelected(QColor)), this, SLOT(color(QColor)));
 
         /* panel de droite -> options du projet */
