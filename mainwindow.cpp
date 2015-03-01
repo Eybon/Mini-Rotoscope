@@ -135,6 +135,10 @@ void MainWindow::createDockWindows()
         pelureOignons->setIcon(QIcon("./resource/oignons.png"));
         pelureOignons->setIconSize( QSize( 60,60 ));
 
+        onionsAmount = new QLineEdit();
+        onionsAmount->setValidator( new QIntValidator(2, 4, this) );
+        onionsAmount->setMaximumWidth(60);
+
         QPushButton *lectureVideo = new QPushButton("");
         lectureVideo->setMinimumSize(QSize(60,60));
         lectureVideo->setIcon(QIcon("./resource/play.png"));
@@ -157,6 +161,7 @@ void MainWindow::createDockWindows()
 
         panelConf->addStretch();
         panelConf->addWidget(pelureOignons);
+        panelConf->addWidget(onionsAmount);
         panelConf->addWidget(lectureVideo);
         panelConf->addWidget(imageFond);
         panelConf->addWidget(exportVideo);
@@ -170,6 +175,9 @@ void MainWindow::createDockWindows()
 
     connect(imageFond, SIGNAL(clicked()), this, SLOT(activeFond()));
     connect(lectureVideo, SIGNAL(clicked()), zoneDessin, SLOT(lecture()));
+    connect(pelureOignons, SIGNAL(clicked()), zoneDessin, SLOT(activateOnions()));
+    connect(onionsAmount, SIGNAL(returnPressed()), this, SLOT(prepare_onions_changed_signal()));
+    connect(this, SIGNAL(send_onions_changed_signal(int)), zoneDessin, SLOT(onions_changed(int)));
 
     /* panel du bas  */
     QDockWidget *dockSlide = new QDockWidget(tr(""), this);
@@ -181,8 +189,6 @@ void MainWindow::createDockWindows()
     //TRY
     connect(framesContainer, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(change_frame(QListWidgetItem*)));
     connect(framesContainer, SIGNAL(itemEntered(QListWidgetItem*)), this, SLOT(change_frame(QListWidgetItem*)));
-
-    connect(pelureOignons, SIGNAL(clicked()), zoneDessin, SLOT(activateOnions()));
     /*
     for (int i = 0; i < 10; i++) {
         framesContainer->addItem(new QListWidgetItem(QIcon("./resource/thumb/riot.png"),"Riot"));
@@ -333,6 +339,11 @@ void MainWindow::change_frame(QListWidgetItem *item) {
 void MainWindow::prepare_goto_signal() {
     int gotoIndex = gotoVal->text().toInt();
     emit send_goto_signal(gotoIndex);
+}
+
+void MainWindow::prepare_onions_changed_signal() {
+    int newOnionsVal = onionsAmount->text().toInt();
+    emit send_onions_changed_signal(newOnionsVal);
 }
 
 MainWindow::~MainWindow()

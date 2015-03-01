@@ -56,7 +56,7 @@ public slots:
     void lecture();
     void activateOnions();
     void go_to(int);
-
+    void onions_changed(int);
 };
 
 #endif

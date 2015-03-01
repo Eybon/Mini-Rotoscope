@@ -316,6 +316,11 @@ void QZoneDessin::go_to(int index) {
     }
 }
 
+void QZoneDessin::onions_changed(int amount) {
+    m_onionsLayerNumber = amount;
+    this->update();
+}
+
 void QZoneDessin::lecture(){
     std::vector<QImage*> list;
     int size = drawings.size();
