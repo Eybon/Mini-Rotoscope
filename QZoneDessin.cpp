@@ -216,12 +216,13 @@ void QZoneDessin::loadProject(Project *project) {
             imagefile.write(picture);
         }
         drawings[fileInfo.absoluteFilePath()] = new QImage(drawFile.fileName());
-        qDebug() << "Drawing added for file " << fileInfo.absoluteFilePath();
-        initialisationImage();
+        qDebug() << "Drawing " << drawFile.fileName() << " added for file " << fileInfo.absoluteFilePath();
         images_amount++;
         progress.setValue(i);
     }
 
+    //HEY, something to look at there !
+    //initialisationImage();
     this->project = project;
     this->setImageFond(getImageForIndex(0));
 }
@@ -290,7 +291,7 @@ void QZoneDessin::saveProject()
     for(auto it=drawings.begin();it!=drawings.end();it++)
     {
 
-        QImageWriter imagefile(convertToFramePath(it->first)+".png");
+        QImageWriter imagefile(convertToFramePath(it->first));
         imagefile.setFormat("png");
         imagefile.setQuality(100);
         qDebug() << "Image à enregistrer : " <<  convertToFramePath(it->first);
@@ -321,11 +322,11 @@ void QZoneDessin::onions_changed(int amount) {
     this->update();
 }
 
-void QZoneDessin::lecture(){
+void QZoneDessin::lecture(int beginning){
     std::vector<QImage*> list;
     int size = drawings.size();
     qDebug() << "Nombre d'image : " << size;
-    for(int i=0;i<size;i++)
+    for(int i=beginning-1;i<size;i++)
     {
         QString current = getImageForIndex(i);
         QImage *img = drawings[current];

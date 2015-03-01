@@ -52,6 +52,7 @@ private:
 signals:
     void send_goto_signal(int);
     void send_onions_changed_signal(int);
+    void send_lecture_signal(int);
 
 public slots:
     void newFile();
@@ -65,6 +66,7 @@ public slots:
     void activeFond(){zoneDessin->activeFond();}
     void prepare_goto_signal();
     void prepare_onions_changed_signal();
+    void prepare_lecture_signal();
     void change_frame(QListWidgetItem*);
 };
 

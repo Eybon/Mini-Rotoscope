@@ -53,7 +53,7 @@ public slots:
     void previous_image();
     void next_image();
     void saveProject();
-    void lecture();
+    void lecture(int);
     void activateOnions();
     void go_to(int);
     void onions_changed(int);

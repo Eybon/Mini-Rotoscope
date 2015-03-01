@@ -174,7 +174,8 @@ void MainWindow::createDockWindows()
     addDockWidget(Qt::RightDockWidgetArea, dockConf);
 
     connect(imageFond, SIGNAL(clicked()), this, SLOT(activeFond()));
-    connect(lectureVideo, SIGNAL(clicked()), zoneDessin, SLOT(lecture()));
+    connect(lectureVideo, SIGNAL(clicked()), this, SLOT(prepare_lecture_signal()));
+    connect(this, SIGNAL(send_lecture_signal(int)), zoneDessin, SLOT(lecture(int)));
     connect(pelureOignons, SIGNAL(clicked()), zoneDessin, SLOT(activateOnions()));
     connect(onionsAmount, SIGNAL(returnPressed()), this, SLOT(prepare_onions_changed_signal()));
     connect(this, SIGNAL(send_onions_changed_signal(int)), zoneDessin, SLOT(onions_changed(int)));
@@ -344,6 +345,21 @@ void MainWindow::prepare_goto_signal() {
 void MainWindow::prepare_onions_changed_signal() {
     int newOnionsVal = onionsAmount->text().toInt();
     emit send_onions_changed_signal(newOnionsVal);
+}
+
+void MainWindow::prepare_lecture_signal() {
+    bool ok;
+    int beginning = QInputDialog::getInt(this, tr("Visionnage de la vidéo"),
+                                     tr("Veuillez entrer une valeur comprise entre 1 et le nombre d'images comprises dans le projet :"), 1, 1, this->zoneDessin->getImagesAmount(), 1, &ok);
+    if (ok) {
+        emit send_lecture_signal(beginning);
+    }
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText("La valeur doit être comprise entre 1 et le nombre d'images comprises dans le projet.");
+        msgBox.exec();
+    }
 }
 
 MainWindow::~MainWindow()
