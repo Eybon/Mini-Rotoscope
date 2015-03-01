@@ -34,15 +34,10 @@ QZoneDessin::QZoneDessin(QWidget * parent)
     setSizePen(10);
 }
 
-void QZoneDessin::initialisationImage()
+void QZoneDessin::initialisationImage(QImage *img)
 {
-    int size = drawings.size();
-    for(int i = 0;i<size;i++)
-    {
-        QString s = getImageForIndex(i);
-        QPainter painter(drawings[s]);
-        painter.fillRect(0,0,(drawings[s])->width(),(drawings[s])->height(),Qt::white);
-    }
+    QPainter painter(img);
+    painter.fillRect(0,0,(img)->width(),(img)->height(),Qt::white);
 }
 
 
@@ -208,6 +203,7 @@ void QZoneDessin::loadProject(Project *project) {
             QImage picture = QImage(actualImage.size(), QImage::Format_RGB32);
             picture.fill(32);
             picture.setAlphaChannel(picture);
+            initialisationImage(&picture);
 
             QImageWriter imagefile;
             imagefile.setFileName(drawFile.fileName());
@@ -326,7 +322,7 @@ void QZoneDessin::lecture(int beginning){
     std::vector<QImage*> list;
     int size = drawings.size();
     qDebug() << "Nombre d'image : " << size;
-    for(int i=beginning-1;i<size;i++)
+    for(int i=0;i<beginning;i++)
     {
         QString current = getImageForIndex(i);
         QImage *img = drawings[current];
