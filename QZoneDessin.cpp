@@ -322,7 +322,7 @@ void QZoneDessin::lecture(int beginning){
     std::vector<QImage*> list;
     int size = drawings.size();
     qDebug() << "Nombre d'image : " << size;
-    for(int i=0;i<beginning;i++)
+    for(int i=beginning-1;i<size;i++)
     {
         QString current = getImageForIndex(i);
         QImage *img = drawings[current];
